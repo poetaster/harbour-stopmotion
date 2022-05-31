@@ -64,7 +64,7 @@ Page {
            id: foldereDialog
            path: "/run/media/defaultuser"
            title: "Save to:"
-           onAccepted: savePath = selectedPath
+           onAccepted: savePath = selectedPath + "/"
            onRejected: savePath = StandardPaths.pictures
         }
     }
@@ -318,7 +318,7 @@ Page {
                         pageStack.push(internalPicker)
                         if (savePath !== ""){
                             //selectedPath.text=StandardPaths.pictures+"/Stopmotion/";
-                            selectedPath.text = savePath
+                            selectPath.text = savePath
                         }
                     }
                 }
@@ -327,7 +327,8 @@ Page {
                     onClicked: {
                         pageStack.push(externalPicker)
                         if (savePath !== ""){
-                            selectedPath.text = savePath
+                            console.debug(savePath)
+                            selectPath.text = savePath
                         }
                         //selectedPath.text=UILink.getSDPath()+"/Stopmotion/";
                     }
@@ -337,7 +338,7 @@ Page {
             onCurrentIndexChanged: Database.setProp('path_type',String(currentIndex));
         }
         TextField {
-            id:selectedPath
+            id:selectPath
             anchors {
                 left: parent.left
                 right:parent.right
@@ -471,12 +472,12 @@ Page {
           }
           counter++
            //var date = new Date()
-           var filename = savePath.text + seriesName + pad(counter, 6) ;
+           var filename = savePath +"/" + seriesName + pad(counter, 4) ;
             //date.toISOString().split('T')[0];
             //notification.body = moviePath;
             //notification.previewBody = moviePath;
 
-            console.log(savePath.text);
+            console.log(savePath);
             console.log(filename);
 
             //notification.path = selectedPath.text+"/"+moviePath;
@@ -507,9 +508,9 @@ Page {
         pathSelector.currentIndex = parseInt(Database.getProp('path_type'));
 
         if (Database.getProp('path')!=="")
-            selectedPath.text = Database.getProp('path');
+            selectPath.text = Database.getProp('path');
         else
-            selectedPath.text=StandardPaths.pictures+"/Stopmotion/";
+            selectPath.text=StandardPaths.pictures+"/Stopmotion/";
 
         flashModeSelector.currentIndex = parseInt(Database.getProp('flash_type'));
 
