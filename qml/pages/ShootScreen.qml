@@ -6,6 +6,7 @@ import Sailfish.Silica 1.0
 import QtMultimedia 5.0
 import org.nemomobile.notifications 1.0
 import "../utils/localdb.js" as Database
+//import "../sound"
 
 Page {
     id: page
@@ -143,18 +144,14 @@ Page {
                     camera.searchAndLock();
                     pStopmotion.start()
                     mA.state = "Recording";
-                    //                    console.log(camera.cameraStatus);
-                    //                    camera.videoRecorder.setOutputLocation(selectedPath.text+Date.now().toString()+".mp4");
-                    //                    camera.videoRecorder.record();
-                    //                    console.log("started record");
                 } else {
                     pStopmotion.stop();
                     camera.unlock();
                     mA.state= "Ready";
+                    // reset counter
                     counter = 0;
+                    // inc series
                     seriesCounter ++;
-                    //                    camera.videoRecorder.stop();
-                    //                    console.log("stopped record");
                 }
 
             }
@@ -189,6 +186,7 @@ Page {
         Label {
             id : busyText
             //text: qsTr("Processing video encoding\nYou can hide app now, we inform you when it finished");
+            text: counter
             color: Theme.secondaryColor
             anchors{
                 left: parent.left
@@ -197,9 +195,9 @@ Page {
 
                 //                horizontalCenter: parent.horizontalCenter
             }
-            horizontalAlignment: Text.AlignHCenter
+            horizontalAlignment: Text.AlignRight
             wrapMode: "WrapAtWordBoundaryOrAnywhere"
-            visible: pStopmotion.busyEncoding
+            //visible: pStopmotion.busyEncoding
         }
 
         state : "Ready"
@@ -459,6 +457,10 @@ Page {
     }
 
 */
+    SoundEffect {
+        id: playClick
+        source: Qt.resolvedUrl("../sound/click.wav")
+    }
 
     Timer {
        id: pStopmotion
@@ -470,19 +472,18 @@ Page {
           if ( ! savePath || savePath === "") {
               savePath = StandardPaths.pictures+"/Stopmotion/"
           }
+          playClick.play()
+
+          // increment on start
           counter++
-           //var date = new Date()
-           var filename = savePath +"/" + seriesName + pad(counter, 4) ;
-            //date.toISOString().split('T')[0];
-            //notification.body = moviePath;
-            //notification.previewBody = moviePath;
 
-            console.log(savePath);
-            console.log(filename);
+          //var date = new Date()
+          //date.toISOString().split('T')[0];
+          var filename = savePath +"/" + seriesName + pad(counter, 4) ;
 
-            //notification.path = selectedPath.text+"/"+moviePath;
-            //notification.publish();
-           camera.imageCapture.captureToLocation(filename)
+          console.log(filename);
+
+          camera.imageCapture.captureToLocation(filename)
       }
     }
 
