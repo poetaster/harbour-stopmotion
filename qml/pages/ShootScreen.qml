@@ -14,6 +14,15 @@ Page {
     property alias oCamera: camera
     property var pStopmotion
     property var savePath: Database.getProp('path')
+    property var seriesName
+    property int seriesCounter: 0
+    property int counter: 0
+
+    function pad(n, width) {
+        n = n + '';
+        return n.length >= width ? n :
+            new Array(width - n.length + 1).join('0') + n;
+    }
 
     QtObject {
         id:d
@@ -30,7 +39,6 @@ Page {
             exposureMode: Camera.ExposureAuto
         }
         captureMode: Camera.CaptureStillImage
-
         flash.mode: Camera.FlashOff
 
     }
@@ -42,15 +50,23 @@ Page {
     }
 
     Component {
-        id:folderPicked
+        id: internalPicker
         FolderPickerDialog {
-           id: folderDialog
+           id: folderiDialog
            title: "Save to:"
            onAccepted: savePath = selectedPath
            onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         }
-
-
+    }
+    Component {
+        id: externalPicker
+        FolderPickerDialog {
+           id: foldereDialog
+           path: "/run/media/defaultuser"
+           title: "Save to:"
+           onAccepted: savePath = selectedPath
+           onRejected: savePath = StandardPaths.pictures
+        }
     }
 
     PropertyAnimation { id: closeDockAnimation;
@@ -124,21 +140,25 @@ Page {
             visible: !pStopmotion.busyEncoding
             onClicked: {
                 if (mA.state==="Ready"){
+                    camera.searchAndLock();
+                    pStopmotion.start()
                     mA.state = "Recording";
                     //                    console.log(camera.cameraStatus);
-
                     //                    camera.videoRecorder.setOutputLocation(selectedPath.text+Date.now().toString()+".mp4");
                     //                    camera.videoRecorder.record();
-                    pStopmotion.start()
                     //                    console.log("started record");
                 } else {
-                    //                    camera.videoRecorder.stop();
-                    mA.state= "Ready";
                     pStopmotion.stop();
+                    camera.unlock();
+                    mA.state= "Ready";
+                    counter = 0;
+                    seriesCounter ++;
+                    //                    camera.videoRecorder.stop();
                     //                    console.log("stopped record");
                 }
 
             }
+
             states:[
                 State {
                     name:"Horizontal"
@@ -295,17 +315,21 @@ Page {
 
                 MenuItem { text: "Internal" ;
                     onClicked: {
-                        pageStack.push(folderPicked)
-                        if (savePath === ""){
+                        pageStack.push(internalPicker)
+                        if (savePath !== ""){
                             //selectedPath.text=StandardPaths.pictures+"/Stopmotion/";
                             selectedPath.text = savePath
                         }
                     }
                 }
                 MenuItem { text: "SD card"
-                    visible:UILink.sdAvailable
+                    //visible:UILink.sdAvailable
                     onClicked: {
-                        selectedPath.text=UILink.getSDPath()+"/Stopmotion/";
+                        pageStack.push(externalPicker)
+                        if (savePath !== ""){
+                            selectedPath.text = savePath
+                        }
+                        //selectedPath.text=UILink.getSDPath()+"/Stopmotion/";
                     }
                 }
             }
@@ -326,6 +350,22 @@ Page {
                 savePath = text
                 //pStopmotion.setSavePath(text);
                 Database.setProp('path',text);
+            }
+        }
+        TextField {
+            id:sName
+            anchors {
+                left: parent.left
+                right:parent.right
+            }
+            text : "series" + seriesCounter
+            height:Theme.itemSizeMedium
+            placeholderText: "Enter series name"
+            label: "Series name"
+            onTextChanged: {
+                seriesName = text
+                //pStopmotion.setSavePath(text);
+                //Database.setProp('path',text);
             }
         }
         ComboBox {
@@ -350,7 +390,35 @@ Page {
 
             }
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
-        }
+        } /*
+        Item {
+            IconButton {
+                id: buttonImage
+                anchors.fill: parent
+                source: "img/play-button.png"
+                width: button.width; height: button.height
+                onClicked: {
+                    if (camera.lockStatus == Camera.Unlocked) {
+                        camera.searchAndLock();
+                        btnText.text = "Focus";
+                    } else if (camera.lockStatus == Camera.Searching) {
+                        btnText.text = "Focusing";
+                    } else {
+                        camera.unlock();
+                        btnText.text = "Unlock";
+                    }
+                }
+            }
+            Text {
+                id: btnText
+                text: "unlock"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+                font.bold: true
+            }
+        }*/
+
     }
 
 
@@ -401,12 +469,14 @@ Page {
           if ( ! savePath || savePath === "") {
               savePath = StandardPaths.pictures+"/Stopmotion/"
           }
-           var date = new Date()
-           var filename = selectedPath.text + date.toISOString();
+          counter++
+           //var date = new Date()
+           var filename = savePath.text + seriesName + pad(counter, 6) ;
+            //date.toISOString().split('T')[0];
             //notification.body = moviePath;
             //notification.previewBody = moviePath;
 
-            console.log(selectedPath.text);
+            console.log(savePath.text);
             console.log(filename);
 
             //notification.path = selectedPath.text+"/"+moviePath;
