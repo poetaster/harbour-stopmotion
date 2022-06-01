@@ -20,10 +20,9 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/img/*.png \
     qml/utils/*.js \
     qml/sound/*.wav \
+    rpm/harbour-stopmotion.spec \
     rpm/harbour-stopmotion.changes.in \
     rpm/harbour-stopmotion.changes.run.in \
-    rpm/harbour-stopmotion.spec \
-    rpm/harbour-stopmotion.yaml \
     translations/*.ts \
     harbour-stopmotion.desktop
 

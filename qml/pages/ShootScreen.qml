@@ -41,6 +41,7 @@ Page {
         }
         captureMode: Camera.CaptureStillImage
         flash.mode: Camera.FlashOff
+        //focus.mode: Camera.FocusContinuous
 
     }
     onOrientationChanged: {
@@ -389,7 +390,8 @@ Page {
 
             }
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
-        } /*
+        }
+        /*
         Item {
             IconButton {
                 id: buttonImage
@@ -543,6 +545,7 @@ Page {
         console.log("state changed to "+page.state);
         console.log("record state : "+mA.state);
         if (page.state=="active"){
+            //camera.focus.isFocusModeSupported(Camera.FocusAuto)
             camera.start();
         } else if (page.state=="deactivated") {
             camera.stop();

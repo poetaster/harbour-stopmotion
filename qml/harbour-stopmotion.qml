@@ -3,6 +3,9 @@ import Sailfish.Silica 1.0
 import QtMultimedia 5.0
 import "pages"
 
+// Icon
+//<a href="https://www.flaticon.com/free-icons/timelapse" title="timelapse icons">Timelapse icons created by Freepik - Flaticon</a>
+
 ApplicationWindow
 {
     initialPage: Component {
@@ -17,7 +20,7 @@ ApplicationWindow
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     allowedOrientations: Orientation.All
     _defaultPageOrientations: Orientation.All
-
+/*
     Connections {
         target: UILink
         onRequestedReplacePage:{
@@ -25,7 +28,7 @@ ApplicationWindow
             pageStack.replace(Qt.resolvedUrl(page));
         }
     }
-
+*/
 
     //        anchors.rightMargin: 20
     VideoOutput {
