@@ -4,49 +4,50 @@ import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
 import QtMultimedia 5.0
-import org.nemomobile.notifications 1.0
+import Nemo.Notifications 1.0
 import "../utils/localdb.js" as Database
 //import "../sound"
 
 Page {
     id: page
-    allowedOrientations: Orientation.All
 
+    allowedOrientations: Orientation.All
+    property bool debug: true
     property alias oCamera: camera
     property var pStopmotion
     property var savePath: Database.getProp('path')
     property var seriesName
     property int seriesCounter: 0
     property int counter: 0
+    property string recordPath : StandardPaths.pictures+"/Stopmotion"
 
+    // function to pad image/series names with leading 0s
     function pad(n, width) {
         n = n + '';
         return n.length >= width ? n :
-            new Array(width - n.length + 1).join('0') + n;
+                                   new Array(width - n.length + 1).join('0') + n;
     }
 
     QtObject {
         id:d
         property real cDOCK_PANEL_SIZE: 800
     }
-    property string recordPath : StandardPaths.pictures+"/Stopmotion"
+
     Camera {
         id: camera
 
         imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
-
         exposure {
-            //            exposureCompensation: -1.0
             exposureMode: Camera.ExposureAuto
         }
         captureMode: Camera.CaptureStillImage
         flash.mode: Camera.FlashOff
-        //focus.mode: Camera.FocusContinuous
-
+        focus.focusMode: Camera.FocusContinuous
     }
+
     onOrientationChanged: {
         if (orientation==Orientation.LandscapeInverted){
-            console.log("inverted image");
+            if (debug) console.log("inverted image");
             camera.imageCapture.setMetadata("Orientation",0);
         }
     }
@@ -54,20 +55,20 @@ Page {
     Component {
         id: internalPicker
         FolderPickerDialog {
-           id: folderiDialog
-           title: "Save to:"
-           onAccepted: savePath = selectedPath
-           onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+            id: folderiDialog
+            title: "Save to:"
+            onAccepted: savePath = selectedPath
+            onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         }
     }
     Component {
         id: externalPicker
         FolderPickerDialog {
-           id: foldereDialog
-           path: "/run/media/defaultuser"
-           title: "Save to:"
-           onAccepted: savePath = selectedPath + "/"
-           onRejected: savePath = StandardPaths.pictures
+            id: foldereDialog
+            path: "/run/media/defaultuser"
+            title: "Save to:"
+            onAccepted: savePath = selectedPath + "/"
+            onRejected: savePath = StandardPaths.pictures
         }
     }
 
@@ -129,25 +130,39 @@ Page {
             }
         }
         //        }
-
+        /*CameraButton {
+            text: "Capture"
+            visible: camera.imageCapture.ready
+            onClicked: camera.imageCapture.capture()
+        }*/
         IconButton {
             id: recordButton
             icon.source: Qt.resolvedUrl("../img/play-button.png")
+            width: 50
+            height: 50
             anchors {
                 bottom: parent.bottom
-                margins: 30
-
+                margins: 20
                 horizontalCenter: parent.horizontalCenter
             }
+
             visible: !pStopmotion.busyEncoding
+
             onClicked: {
                 if (mA.state==="Ready"){
-                    camera.searchAndLock();
+
+                    // use autofocus
+                    //camera.searchAndLock();
+
                     pStopmotion.start()
                     mA.state = "Recording";
                 } else {
                     pStopmotion.stop();
-                    camera.unlock();
+
+                    // use autofocus
+                    //camera.searchAndLock();
+                    //camera.unlock();
+
                     mA.state= "Ready";
                     // reset counter
                     counter = 0;
@@ -184,6 +199,7 @@ Page {
 
             running: pStopmotion.running
         }
+
         Label {
             id : busyText
             //text: qsTr("Processing video encoding\nYou can hide app now, we inform you when it finished");
@@ -326,7 +342,7 @@ Page {
                     onClicked: {
                         pageStack.push(externalPicker)
                         if (savePath !== ""){
-                            console.debug(savePath)
+                            if (debug) console.debug(savePath)
                             selectPath.text = savePath
                         }
                         //selectedPath.text=UILink.getSDPath()+"/Stopmotion/";
@@ -423,9 +439,8 @@ Page {
     }
 
 
-
-
-/*
+    /*
+    // this is pending python ffmpeg implmentation
     Notification {
         id: notification
         property string path: ""
@@ -446,54 +461,58 @@ Page {
         }
         //                onClosed: console.log("Closed, reason: " + reason)
     }
+
     Connections {
         target: pStopmotion
 
         onRequestRunNotify: {
+
             notification.body = moviePath;
             notification.previewBody = moviePath;
-            console.log(selectedPath.text);
+
+            if (debug) console.log(selectedPath.text);
             notification.path = selectedPath.text+"/"+moviePath;
             notification.publish();
         }
-    }
+    }*/
 
-*/
+
+    // simple click on Timer start
     SoundEffect {
         id: playClick
         source: Qt.resolvedUrl("../sound/click.wav")
     }
 
+    // drives the repeated capture of images
     Timer {
-       id: pStopmotion
-       interval: 1000;
-       running: false
-       repeat: true
+        id: pStopmotion
+        interval: 1000;
+        running: false
+        repeat: true
 
-      onTriggered: {
-          if ( ! savePath || savePath === "") {
-              savePath = StandardPaths.pictures+"/Stopmotion/"
-          }
-          playClick.play()
+        onTriggered: {
+            if ( ! savePath || savePath === "") {
+                savePath = StandardPaths.pictures+"/Stopmotion/"
+            }
+            playClick.play()
+            // increment on start
+            counter++
 
-          // increment on start
-          counter++
+            //var date = new Date()
+            //date.toISOString().split('T')[0];
+            var filename = savePath +"/" + seriesName + pad(counter, 4) ;
 
-          //var date = new Date()
-          //date.toISOString().split('T')[0];
-          var filename = savePath +"/" + seriesName + pad(counter, 4) ;
+            if (debug) console.log(filename);
 
-          console.log(filename);
-
-          camera.imageCapture.captureToLocation(filename)
-      }
+            camera.imageCapture.captureToLocation(filename)
+        }
     }
 
     Component.onCompleted: {
 
-        console.log("completed");
+        if (debug) console.log("completed");
 
-        console.log("delay "+Database.getProp('delay'));
+        if (debug) console.log("delay " + Database.getProp('delay'));
 
         delaySelector.currentIndex = parseInt(Database.getProp('delay'));
         if (delaySelector.currentIndex==0)
@@ -542,8 +561,10 @@ Page {
 
     ]
     onStateChanged: {
-        console.log("state changed to "+page.state);
-        console.log("record state : "+mA.state);
+
+        if (debug) console.log("state changed to "+page.state);
+        if (debug) console.log("record state : "+mA.state);
+
         if (page.state=="active"){
             //camera.focus.isFocusModeSupported(Camera.FocusAuto)
             camera.start();

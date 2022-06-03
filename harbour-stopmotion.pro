@@ -18,6 +18,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/cover/CoverPage.qml \
     qml/pages/*.qml \
     qml/img/*.png \
+    qml/pages/CameraButton.qml \
     qml/utils/*.js \
     qml/sound/*.wav \
     rpm/harbour-stopmotion.spec \
