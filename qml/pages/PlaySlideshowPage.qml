@@ -38,7 +38,7 @@ Page {
     property bool firstLoaded: false
 
     // Settings.
-    property int slideshowInterval: 1000 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
+    property int slideshowInterval: 300 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
     property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
 
@@ -82,9 +82,9 @@ Page {
                 }
             }
 
-            slideshowRunning = true
-            blanking.preventBlanking = true
-            slideshowRunningToggled(slideshowRunning)
+            slideshowRunning = false
+            blanking.preventBlanking = false
+            //slideshowRunningToggled(slideshowRunning)
         }
         else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
         {
@@ -148,7 +148,7 @@ Page {
         onStatusChanged: {
             if(status == Image.Ready && !firstLoaded)
             {
-                console.log("Image ready, start timer...")
+                if (debug) console.log("Image ready, start timer...")
                 firstLoaded = true
                 imageChanged(imageSource)
                 slideshowTimer.start()
@@ -247,7 +247,7 @@ Page {
 
         // Toggle slideshow start/stop.
         onClicked: {
-            console.log("onClicked...")
+            if(debug) console.log("onClicked...")
             toggleSlideshow()
         }
     }
@@ -262,7 +262,7 @@ Page {
         width: parent.width / 5
 
         onClicked: {
-            console.log("Move to next image...")
+            if (debug) console.log("Move to next image...")
 
             // If slideshow is running then restart timer on picture change.
             if (slideshowRunning) {
@@ -282,7 +282,7 @@ Page {
 
         // Change image when timer triggers.
         onTriggered: {
-            console.log("Change picture...")
+            if (debug) console.log("Change picture...")
             nextPicture()
         }
     }

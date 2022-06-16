@@ -5,11 +5,14 @@ import Nemo.Thumbnailer 1.0
 import "../components"
 import "../utils/localdb.js" as DB
 
-Dialog {
+Page {
     id: slideshowDialog
+    backgroundColor: black
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
+
+    //property alias oCamera
 
     property var iniFolder
     property bool editMode: false
@@ -29,6 +32,8 @@ Dialog {
     property bool debug: true
 
     Component.onCompleted: {
+        if (debug) console.debug(oCamera)
+
   /*      if (editMode && slideshowId > 0) {
             var show = DB.getSlideshow(slideshowId)
             if (show) {
@@ -53,17 +58,17 @@ Dialog {
     */
     }
 
-    onDone: {
+/*    onDone: {
         if (result == DialogResult.Accepted) {
             slideshowName = slideshowNameField.text
             var show = {'id': editMode ? slideshowId : -1, 'name': slideshowName, 'music': [], 'images': []}
-/*
+
             for (var mi = 0; mi < backgroundMusicModel.count; ++mi) {
                 var mf = backgroundMusicModel.get(mi)
                 var music = {'fileName': mf.fileName, 'url': mf.url, 'slideshowId': editMode ? slideshowId : -1}
                 show.music.push(music)
             }
-*/
+
             for (var ii = 0; ii < imageListModel.count; ++ii) {
                 var img = imageListModel.get(ii)
                 var image = {'fileName': img.fileName, 'url': img.url, 'slideshowId': editMode ? slideshowId : -1}
@@ -73,8 +78,9 @@ Dialog {
             slideshow = show
         }
     }
-
     canAccept: slideshowNameField.text.trim().length > 0
+
+*/
 
 /*
     ListModel {
@@ -119,7 +125,9 @@ Dialog {
                 text: qsTr("Add files")
                 onClicked: pageStack.push(multiImagePickerDialog)
             }
+        }
 
+        PushUpMenu {
             MenuItem {
                 id: menuStartSlideshow
                 text: qsTr("Sart slideshow")
@@ -131,6 +139,7 @@ Dialog {
                     //mainSlideshowConnections.target = playSlideshowPage
                 }
             }
+
         }
 
         contentHeight: contentColumn.height
@@ -144,9 +153,9 @@ Dialog {
 
             TextField {
                 id: slideshowNameField
-                focus: true
-                label: qsTr("Slideshow name")
-                placeholderText: qsTr("name placeholder")
+                focus: false
+                label: qsTr("Slideshow filename")
+                placeholderText: qsTr("File to save")
                 text: slideshowName
                 Keys.onEnterPressed: {
                     focus = false

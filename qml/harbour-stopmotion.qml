@@ -20,15 +20,6 @@ ApplicationWindow
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
     allowedOrientations: Orientation.All
     _defaultPageOrientations: Orientation.All
-/*
-    Connections {
-        target: UILink
-        onRequestedReplacePage:{
-            pageStack.clear();
-            pageStack.replace(Qt.resolvedUrl(page));
-        }
-    }
-*/
 
     //        anchors.rightMargin: 20
     VideoOutput {

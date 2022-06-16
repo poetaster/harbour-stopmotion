@@ -3,13 +3,13 @@ Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-stopmotion
 Exec=sailfish-qml harbour-stopmotion
-Name=harbour-stopmotion
+Name=Stopmotion
 # translation example:
 # your app name in German locale (de)
 #
 # Remember to comment out the following line, if you do not want to use
 # a different app name in German locale (de).
-Name[de]=harbour-stopmotion
+Name[de]=Stopmotion
 
 [X-Sailjail]
 OrganizationName=de.poetaster

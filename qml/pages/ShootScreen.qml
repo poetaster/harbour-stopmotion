@@ -409,10 +409,9 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
-                var dialog = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
-                dialog.accepted.connect(function() {
-                    //addSlideshow(dialog.slideshow);
-                })
+                pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
+                //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
+                //   )
             }
         }
 

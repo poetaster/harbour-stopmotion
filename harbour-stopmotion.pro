@@ -19,6 +19,10 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/pages/*.qml \
     qml/img/*.png \
     qml/pages/CameraButton.qml \
+    qml/pages/ImagePage.qml \
+    qml/pages/SlideShowPage.qml \
+    qml/pages/PlaySlideShowPage.qml \
+    qml/components/*.qml \
     qml/utils/*.js \
     qml/sound/*.wav \
     rpm/harbour-stopmotion.spec \
