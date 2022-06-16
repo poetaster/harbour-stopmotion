@@ -1,4 +1,4 @@
-import QtQuick 2.5
+import QtQuick 2.6
 import Sailfish.Silica 1.0
 import Nemo.KeepAlive 1.2
 import QtMultimedia 5.6
@@ -20,6 +20,9 @@ Page {
     property int imageIndex: -1
     property bool slideshowRunning: false
     property bool debug: true
+    Animator {
+
+    }
 
     onSlideshowRunningChanged: {
         if (debug) console.log("SlideshowRunning status changed: " + slideshowRunning)
@@ -38,7 +41,7 @@ Page {
     property bool firstLoaded: false
 
     // Settings.
-    property int slideshowInterval: 300 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
+    property int slideshowInterval: 400 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
     property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
 

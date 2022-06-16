@@ -52,15 +52,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Slideshow name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>name placeholder</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Remove image</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slideshow filename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File to save</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

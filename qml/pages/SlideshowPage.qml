@@ -7,6 +7,10 @@ import "../utils/localdb.js" as DB
 
 Page {
     id: slideshowDialog
+    QtObject {
+        id:slides
+        property real cDOCK_PANEL_SIZE: 800
+    }
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
@@ -30,33 +34,23 @@ Page {
 
     property bool debug: true
 
-    function toggleSlideshow() {
-        slideshowRunning = !slideshowRunning
-    }
-    property bool slideshowRunning
-
-    signal slideshowRunningToggled(bool runningStatus)
-
-    onSlideshowRunningChanged: {
-        if (debug) console.log("Slideshow status changed: " + slideshowRunning)
-        if (slideshowRunning) {
-        }
-
-        slideshowRunningToggled(slideshowRunning)
-    }
     onStatusChanged: {
         if(status === PageStatus.Activating)
         {
-            slideshowRunning = true
+            cameraState.slidesShow(true)
 
          } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
          {
-            slideshowRunning = false
          }
     }
+    Component.onDestruction: {
+            cameraState.slidesShow(false)
+    }
+
     Component.onCompleted: {
-        if (debug) console.debug(slideshowRunning)
-            slideshowRunning = true
+        //if (debug) console.debug(slideshowRunning)
+            //slideshowRunning = true
+            //slideshowRunningToggled(slideshowRunning)
 
   /*      if (editMode && slideshowId > 0) {
             var show = DB.getSlideshow(slideshowId)

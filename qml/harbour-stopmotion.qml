@@ -11,6 +11,7 @@ ApplicationWindow
     Connections {
         id: mainWinConnections
         target: null
+        ignoreUnknownSignals: true
         onImageChanged: {
             console.log("Image changed, current image:", url)
             //coverPage.setImage(url)
@@ -19,19 +20,18 @@ ApplicationWindow
             console.log("Slideshow running:", runningStatus)
             //coverPage.toggleSlideshowRunning(runningStatus)
         }
+    }
 
-        onSlideshowToggled: {
-            console.log("slideshow page")
-            videoOutput.visible = slideStatus
-        }
+    QtObject {
+        id: cameraState
+        signal slidesShow(bool slideshowRunning)
     }
 
     Connections {
-        id: cameraControl
-        onSlideshowRunningToggled: {
-            console.log("Slideshow loaded:", runningStatus)
-            //coverPage.toggleSlideshowRunning(runningStatus)
-            videoOutput.visible = !runningStatus
+        target: cameraState
+        onSlidesShow: {
+            console.log("cameraState:", slideshowRunning)
+            videoOutput.visible = !slideshowRunning
         }
     }
 

@@ -19,18 +19,35 @@ Page {
     property int seriesCounter: 0
     property int counter: 0
     property string recordPath : StandardPaths.pictures+"/Stopmotion"
-    // used for target slide show
+
+    QtObject {
+        id:d
+        property real cDOCK_PANEL_SIZE: 800
+    }
+    // used for target slide show and send signals to the container
     property var slideshowPage
+
+    property bool slideshowRunning: false
+    signal slideshowRunningToggled(bool slideshowRunning)
+    onSlideshowRunningChanged: {
+        if (debug) console.log("shoot to show: " + slideshowRunning)
+        slideshowRunningToggled(slideshowRunning)
+    }
     // function to pad image/series names with leading 0s
     function pad(n, width) {
         n = n + '';
         return n.length >= width ? n :
                                    new Array(width - n.length + 1).join('0') + n;
     }
+    onStatusChanged: {
+        if(status === PageStatus.Activating)
+        {
 
-    QtObject {
-        id:d
-        property real cDOCK_PANEL_SIZE: 800
+         } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
+            slideshowRunning = true
+            slideshowRunningToggled(slideshowRunning)
+         {
+         }
     }
 
     Camera {
@@ -410,7 +427,9 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
-                slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
+                cameraState.slidesShow(true)
+                slideshowRunning = true
+                slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true}))
                 cameraControl.target =  slideshowPage
                 //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
                 //   )
