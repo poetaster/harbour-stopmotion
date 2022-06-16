@@ -8,6 +8,33 @@ import "pages"
 
 ApplicationWindow
 {
+    Connections {
+        id: mainWinConnections
+        target: null
+        onImageChanged: {
+            console.log("Image changed, current image:", url)
+            //coverPage.setImage(url)
+        }
+        onSlideshowRunningToggled: {
+            console.log("Slideshow running:", runningStatus)
+            //coverPage.toggleSlideshowRunning(runningStatus)
+        }
+
+        onSlideshowToggled: {
+            console.log("slideshow page")
+            videoOutput.visible = slideStatus
+        }
+    }
+
+    Connections {
+        id: cameraControl
+        onSlideshowRunningToggled: {
+            console.log("Slideshow loaded:", runningStatus)
+            //coverPage.toggleSlideshowRunning(runningStatus)
+            videoOutput.visible = !runningStatus
+        }
+    }
+
     initialPage: Component {
         id : sscr
         ShootScreen {
@@ -21,15 +48,17 @@ ApplicationWindow
     allowedOrientations: Orientation.All
     _defaultPageOrientations: Orientation.All
 
-    //        anchors.rightMargin: 20
     VideoOutput {
         id:videoOutput
         anchors.fill: parent
         z : -1
-//        source:  shootScr.oCamera
-        //            autoOrientation : true
-        //            autoori
-        //            focus : visible // to receive focus and capture key events when visible
+        focus : visible // to receive focus and capture key events when visible
+        visible: true
+        /*
+        source:  shootScr.oCamera
+        autoOrientation : true
+        autoori
+        */
     }
 }
 

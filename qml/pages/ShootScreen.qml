@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick 2.5
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
@@ -19,7 +19,8 @@ Page {
     property int seriesCounter: 0
     property int counter: 0
     property string recordPath : StandardPaths.pictures+"/Stopmotion"
-
+    // used for target slide show
+    property var slideshowPage
     // function to pad image/series names with leading 0s
     function pad(n, width) {
         n = n + '';
@@ -204,7 +205,7 @@ Page {
                 left: recordButton.left
                 right: recordButton.right
                 top : busyIndicator.bottom
-                horizontalCenter: recordButton.horizontalCenter
+                //horizontalCenter: recordButton.horizontalCenter
             }
             horizontalAlignment: Text.AlignRight
             wrapMode: "WrapAtWordBoundaryOrAnywhere"
@@ -409,7 +410,8 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
-                pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
+                slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
+                cameraControl.target =  slideshowPage
                 //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
                 //   )
             }

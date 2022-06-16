@@ -1,6 +1,6 @@
 import QtQuick 2.5
 import Sailfish.Silica 1.0
-import "../constants.js" as Constants
+//import "../constants.js" as Constants
 
 Page {
     id: imagePage

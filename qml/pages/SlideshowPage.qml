@@ -7,7 +7,6 @@ import "../utils/localdb.js" as DB
 
 Page {
     id: slideshowDialog
-    backgroundColor: black
 
     // The effective value will be restricted by ApplicationWindow.allowedOrientations
     allowedOrientations: Orientation.All
@@ -31,8 +30,33 @@ Page {
 
     property bool debug: true
 
+    function toggleSlideshow() {
+        slideshowRunning = !slideshowRunning
+    }
+    property bool slideshowRunning
+
+    signal slideshowRunningToggled(bool runningStatus)
+
+    onSlideshowRunningChanged: {
+        if (debug) console.log("Slideshow status changed: " + slideshowRunning)
+        if (slideshowRunning) {
+        }
+
+        slideshowRunningToggled(slideshowRunning)
+    }
+    onStatusChanged: {
+        if(status === PageStatus.Activating)
+        {
+            slideshowRunning = true
+
+         } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
+         {
+            slideshowRunning = false
+         }
+    }
     Component.onCompleted: {
-        if (debug) console.debug(oCamera)
+        if (debug) console.debug(slideshowRunning)
+            slideshowRunning = true
 
   /*      if (editMode && slideshowId > 0) {
             var show = DB.getSlideshow(slideshowId)
@@ -136,7 +160,7 @@ Page {
                     if (debug) console.log("Start slideshow...")
                     //playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'musicModel': backgroundMusicModel, 'slideshowOrderArray': getSlideshowOrder()})
                     playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel})
-                    //mainSlideshowConnections.target = playSlideshowPage
+                    mainWinConnections.target = playSlideshowPage
                 }
             }
 
@@ -149,7 +173,7 @@ Page {
             width: parent.width
             spacing: Theme.paddingSmall
 
-            DialogHeader {id: header}
+            PageHeader {id: header}
 
             TextField {
                 id: slideshowNameField

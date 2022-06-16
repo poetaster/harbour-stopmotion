@@ -82,9 +82,9 @@ Page {
                 }
             }
 
-            slideshowRunning = false
-            blanking.preventBlanking = false
-            //slideshowRunningToggled(slideshowRunning)
+            slideshowRunning = true
+            blanking.preventBlanking = true
+            slideshowRunningToggled(slideshowRunning)
         }
         else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
         {
