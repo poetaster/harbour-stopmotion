@@ -1,12 +1,11 @@
-
 import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
 import QtMultimedia 5.0
 import Nemo.Notifications 1.0
+
 import "../utils/localdb.js" as Database
-//import "../sound"
 
 Page {
     id: page
@@ -138,36 +137,32 @@ Page {
         IconButton {
             id: recordButton
             icon.source: Qt.resolvedUrl("../img/play-button.png")
-            width: 50
-            height: 50
+            scale: 0.75
             anchors {
                 bottom: parent.bottom
-                margins: 20
-                horizontalCenter: parent.horizontalCenter
+                right: parent.right
+                margins: 70
+                //horizontalCenter: parent.horizontalCenter
             }
 
             visible: !pStopmotion.busyEncoding
 
             onClicked: {
                 if (mA.state==="Ready"){
-
-                    // use autofocus
-                    //camera.searchAndLock();
-
                     pStopmotion.start()
                     mA.state = "Recording";
-                } else {
-                    pStopmotion.stop();
-
                     // use autofocus
                     //camera.searchAndLock();
-                    //camera.unlock();
-
+                } else {
+                    pStopmotion.stop();
                     mA.state= "Ready";
                     // reset counter
                     counter = 0;
                     // inc series
                     seriesCounter ++;
+                    // use autofocus
+                    //camera.searchAndLock();
+                    //camera.unlock();
                 }
 
             }
@@ -206,11 +201,10 @@ Page {
             text: counter
             color: Theme.secondaryColor
             anchors{
-                left: parent.left
-                right: parent.right
+                left: recordButton.left
+                right: recordButton.right
                 top : busyIndicator.bottom
-
-                //                horizontalCenter: parent.horizontalCenter
+                horizontalCenter: recordButton.horizontalCenter
             }
             horizontalAlignment: Text.AlignRight
             wrapMode: "WrapAtWordBoundaryOrAnywhere"
@@ -221,7 +215,6 @@ Page {
         states:[
             State {
                 name:"Ready"
-                //                when:camera.videoRecorder.recorderStatus === CameraRecorder.LoadedStatus
                 PropertyChanges {
                     target: recordButton
                     icon.source : Qt.resolvedUrl("../img/play-button.png")
@@ -407,6 +400,22 @@ Page {
             }
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
         }
+
+        Button {
+            id: slideshowShowSlideshow
+            anchors {
+                left: parent.left
+                right:parent.right
+            }
+            text: qsTr("Slideshow")
+            onClicked: {
+                var dialog = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath}))
+                dialog.accepted.connect(function() {
+                    //addSlideshow(dialog.slideshow);
+                })
+            }
+        }
+
         /*
         Item {
             IconButton {
