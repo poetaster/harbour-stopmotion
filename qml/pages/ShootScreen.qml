@@ -1,8 +1,8 @@
-import QtQuick 2.5
+import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
-import QtMultimedia 5.0
+import QtMultimedia 5.6
 import Nemo.Notifications 1.0
 
 import "../utils/localdb.js" as Database
@@ -39,9 +39,13 @@ Page {
         return n.length >= width ? n :
                                    new Array(width - n.length + 1).join('0') + n;
     }
+
+
     onStatusChanged: {
-        if(status === PageStatus.Activating)
+        if(status === PageStatus.Active)
         {
+            // not quite!
+            if (debug) console.log(camera.supportedViewfinderResolutions())
 
          } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
             slideshowRunning = true
@@ -52,7 +56,6 @@ Page {
 
     Camera {
         id: camera
-
         imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
         exposure {
             exposureMode: Camera.ExposureAuto
@@ -60,12 +63,25 @@ Page {
         captureMode: Camera.CaptureStillImage
         flash.mode: Camera.FlashOff
         focus.focusMode: Camera.FocusContinuous
+        imageCapture {
+            resolution: "1920x1080"
+        }
     }
 
     onOrientationChanged: {
-        if (orientation==Orientation.LandscapeInverted){
+
+        if (orientation==Orientation.Landscape){
             if (debug) console.log("inverted image");
             camera.imageCapture.setMetadata("Orientation",0);
+            camera.imageCapture.resolution = "1920X1080"
+            camera.viewfinder.resolution = "1920x1080"
+            //old school camera.imageCapture.resolution = "640x480"
+        } else {
+            camera.imageCapture.setMetadata("Orientation",90);
+            camera.viewfinder.resolution = "1080x1920"
+            camera.imageCapture.resolution = "1080X1920"
+            //look at piggz getNearestViewFinderResolution();
+
         }
     }
 
@@ -343,20 +359,17 @@ Page {
                     onClicked: {
                         pageStack.push(internalPicker)
                         if (savePath !== ""){
-                            //selectedPath.text=StandardPaths.pictures+"/Stopmotion/";
                             selectPath.text = savePath
                         }
                     }
                 }
                 MenuItem { text: "SD card"
-                    //visible:UILink.sdAvailable
                     onClicked: {
                         pageStack.push(externalPicker)
                         if (savePath !== ""){
                             if (debug) console.debug(savePath)
                             selectPath.text = savePath
                         }
-                        //selectedPath.text=UILink.getSDPath()+"/Stopmotion/";
                     }
                 }
             }
@@ -402,21 +415,45 @@ Page {
                 right:parent.right
             }
 
-            label: "Flash mode"
+            label: qsTr("Flash mode")
             menu: ContextMenu {
-                MenuItem { text: "Off" ;
+                MenuItem { text: qsTr("Off")
                     onClicked: camera.flash.mode = Camera.FlashOff}
-                MenuItem { text: "On" ;
+                MenuItem { text: qsTr("On")
                     onClicked: camera.flash.mode = Camera.FlashOn}
-                MenuItem { text: "Auto"
+                MenuItem { text: qsTr("Auto")
                     onClicked: camera.flash.mode = Camera.FlashAuto}
-                MenuItem { text: "Red eye reduction"
+                MenuItem { text: qsTr("Red eye reduction")
                     onClicked: camera.flash.mode = Camera.FlashRedEyeReduction}
-                MenuItem { text: "Slow sync front" ;
+                MenuItem { text: qsTr("Slow sync front")
                     onClicked: camera.flash.mode = Camera.FlashSlowSyncFrontCurtain}
 
             }
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
+        }
+
+        ComboBox {
+            id:cameraSelector
+            label: qsTr("Select Camera")
+            anchors {
+                left: parent.left
+                right:parent.right
+            }
+            menu: ContextMenu {
+                MenuItem {
+                    text: qsTr("One")
+                    onClicked: camera.deviceId = 0
+                }
+                MenuItem {
+                    text: qsTr("Two")
+                    onClicked: {
+                        camera.deviceId = 1
+                        console.log(QtMultimedia.availableCameras[0])
+                    }
+
+                }
+            }
+            onCurrentIndexChanged: Database.setProp('deviceId',String(currentIndex));
         }
 
         Button {
@@ -430,7 +467,6 @@ Page {
                 cameraState.slidesShow(true)
                 slideshowRunning = true
                 slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true}))
-                cameraControl.target =  slideshowPage
                 //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
                 //   )
             }
@@ -539,6 +575,12 @@ Page {
 
     Component.onCompleted: {
 
+        camera.viewfinder.resolution = "1920x1080"//getNearestViewFinderResolution();
+        camera.imageCapture.resolution = "1920x1080"
+       if (debug) console.log(camera.supportedViewfinderResolutions(1,20))
+
+         if (debug) console.log(QtMultimedia.defaultCamera.deviceId)
+         if (debug) console.log(QtMultimedia.availableCameras)
         if (debug) console.log("completed");
 
         if (debug) console.log("delay " + Database.getProp('delay'));
