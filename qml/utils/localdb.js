@@ -3,13 +3,14 @@
 .import QtQuick.LocalStorage 2.0 as LocalStorage
 
 var _db;
+var debug = false;
 
 function db(){
     if (!_db){
-        _db = LocalStorage.LocalStorage.openDatabaseSync("harbour-stopmotion", "0.4", "Settings", 100000,
-                                                         function(db) {
-                                                             db.changeVersion("", "0.4");
-                                                         });
+        _db = LocalStorage.LocalStorage.openDatabaseSync(
+                    "harbour-stopmotion", "0.4", "Settings", 100000,
+                     function(db) { db.changeVersion("", "0.4"); }
+                     );
         initDb();
     }
 
@@ -17,8 +18,7 @@ function db(){
 }
 
 function initDb() {
-    console.log("init Database");
-
+    if (debug) console.log("init Database");
     //creating tables
     _db.transaction( function (tx) {
         tx.executeSql("create table if not exists settings (key TEXT primary key, value TEXT)");
@@ -29,9 +29,9 @@ function initDb() {
 
 
 function getProp(propertyName){
-    console.log("getProp: " + propertyName);
-    var retValue;
 
+    if (debug) console.log("getProp: " + propertyName);
+    var retValue;
     db().readTransaction(
                 function (tx) {
                     var queryResults = tx.executeSql("select value from settings where key = ?", [propertyName]);
@@ -41,9 +41,9 @@ function getProp(propertyName){
                     }
 
                     retValue = queryResults.rows.item(0).value;
-                    console.log("getProperty value: " + retValue);
+                    if (debug) console.log("getProperty value: " + retValue);
                 }
-                );
+           );
 
     if (retValue){
         return retValue;
@@ -54,10 +54,10 @@ function getProp(propertyName){
 }
 
 function setProp(propertyName, propertyValue){
-    console.log("setProp: " + propertyName + " = " + propertyValue);
+    if (debug) console.log("setProp: " + propertyName + " = " + propertyValue);
     db().transaction(
-                function (tx){
+         function (tx){
                     tx.executeSql("REPLACE INTO settings (key, value) VALUES (?, ?)", [propertyName, propertyValue]);
                 }
-                );
+          );
 }
