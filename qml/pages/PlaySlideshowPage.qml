@@ -41,7 +41,7 @@ Page {
     property bool firstLoaded: false
 
     // Settings.
-    property int slideshowInterval: 400 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
+    property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
     property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
 

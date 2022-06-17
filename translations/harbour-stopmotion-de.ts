@@ -40,6 +40,42 @@
         <source>Slideshow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Flash mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>On</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Auto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red eye reduction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slow sync front</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select Camera</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Two</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SlideshowPage</name>

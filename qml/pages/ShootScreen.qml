@@ -1,4 +1,4 @@
-import QtQuick 2.2
+﻿import QtQuick 2.2
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
@@ -27,12 +27,6 @@ Page {
     // used for target slide show and send signals to the container
     property var slideshowPage
 
-    property bool slideshowRunning: false
-    signal slideshowRunningToggled(bool slideshowRunning)
-    onSlideshowRunningChanged: {
-        if (debug) console.log("shoot to show: " + slideshowRunning)
-        slideshowRunningToggled(slideshowRunning)
-    }
     // function to pad image/series names with leading 0s
     function pad(n, width) {
         n = n + '';
@@ -44,12 +38,10 @@ Page {
     onStatusChanged: {
         if(status === PageStatus.Active)
         {
-            // not quite!
+            // not quite! but sometimes
             if (debug) console.log(camera.supportedViewfinderResolutions())
 
          } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
-            slideshowRunning = true
-            slideshowRunningToggled(slideshowRunning)
          {
          }
     }
@@ -66,20 +58,20 @@ Page {
         imageCapture {
             resolution: "1920x1080"
         }
+
     }
 
     onOrientationChanged: {
 
-        if (orientation==Orientation.Landscape){
+        if (orientation===Orientation.Landscape){
             if (debug) console.log("inverted image");
             camera.imageCapture.setMetadata("Orientation",0);
             camera.imageCapture.resolution = "1920X1080"
-            camera.viewfinder.resolution = "1920x1080"
-            //old school camera.imageCapture.resolution = "640x480"
-        } else {
-            camera.imageCapture.setMetadata("Orientation",90);
-            camera.viewfinder.resolution = "1080x1920"
+            //camera.viewfinder.resolution = "1920x1080"
+        } else if (orientation === Orientation.Portrait){
+            camera.imageCapture.setMetadata("Orientation",270);
             camera.imageCapture.resolution = "1080X1920"
+            //camera.viewfinder.resolution = "1080x1920"
             //look at piggz getNearestViewFinderResolution();
 
         }
@@ -464,8 +456,9 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
+                //camera.setCameraState()
+                camera.unlock()
                 cameraState.slidesShow(true)
-                slideshowRunning = true
                 slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true}))
                 //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
                 //   )
