@@ -37,21 +37,20 @@ Page {
     onStatusChanged: {
         if(status === PageStatus.Activating)
         {
+            // Connection to Video display from window page
             cameraState.slidesShow(true)
 
          } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
          {
          }
     }
+
     Component.onDestruction: {
+            // Connection to Video display from window page
             cameraState.slidesShow(false)
     }
 
     Component.onCompleted: {
-        //if (debug) console.debug(slideshowRunning)
-            //slideshowRunning = true
-            //slideshowRunningToggled(slideshowRunning)
-
   /*      if (editMode && slideshowId > 0) {
             var show = DB.getSlideshow(slideshowId)
             if (show) {

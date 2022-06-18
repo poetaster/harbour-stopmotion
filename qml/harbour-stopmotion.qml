@@ -8,16 +8,33 @@ import "pages"
 
 ApplicationWindow
 {
+    property bool debug:false
+
+    initialPage: Component {
+        id : sscr
+        ShootScreen {
+            id:shootScr
+            Component.onCompleted: {
+                videoOutput.source=oCamera;
+            }
+        }
+    }
+
+    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    allowedOrientations: Orientation.All
+    _defaultPageOrientations: Orientation.All
+
+    // not using yet, but might add
     Connections {
         id: mainWinConnections
         target: null
         ignoreUnknownSignals: true
         onImageChanged: {
-            console.log("Image changed, current image:", url)
+            if (debug) console.log("Image changed, current image:", url)
             //coverPage.setImage(url)
         }
         onSlideshowRunningToggled: {
-            console.log("Slideshow running:", runningStatus)
+            if (debug) console.log("Slideshow running:", runningStatus)
             //coverPage.toggleSlideshowRunning(runningStatus)
         }
     }
@@ -30,23 +47,12 @@ ApplicationWindow
     Connections {
         target: cameraState
         onSlidesShow: {
-            console.log("cameraState:", slideshowRunning)
+            if (debug) console.log("cameraState:", slideshowRunning)
             videoOutput.visible = !slideshowRunning
         }
     }
 
-    initialPage: Component {
-        id : sscr
-        ShootScreen {
-            id:shootScr
-            Component.onCompleted: {
-                videoOutput.source=oCamera;
-            }
-        }
-    }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
-    allowedOrientations: Orientation.All
-    _defaultPageOrientations: Orientation.All
+
 
     VideoOutput {
         id:videoOutput
@@ -54,11 +60,6 @@ ApplicationWindow
         z : -1
         focus : visible // to receive focus and capture key events when visible
         visible: true
-        /*
-        source:  shootScr.oCamera
-        autoOrientation : true
-        autoori
-        */
     }
 }
 

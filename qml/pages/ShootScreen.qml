@@ -66,11 +66,13 @@ Page {
         if (orientation===Orientation.Landscape){
             if (debug) console.log("inverted image");
             camera.imageCapture.setMetadata("Orientation",0);
-            camera.imageCapture.resolution = "1920X1080"
+            // we don't need to
+            //camera.imageCapture.resolution = "1920X1080"
             //camera.viewfinder.resolution = "1920x1080"
         } else if (orientation === Orientation.Portrait){
             camera.imageCapture.setMetadata("Orientation",270);
-            camera.imageCapture.resolution = "1080X1920"
+            //we don't need to
+            //camera.imageCapture.resolution = "1080X1920"
             //camera.viewfinder.resolution = "1080x1920"
             //look at piggz getNearestViewFinderResolution();
 
@@ -167,7 +169,8 @@ Page {
             anchors {
                 bottom: parent.bottom
                 right: parent.right
-                margins: 70
+                rightMargin: 42
+                bottomMargin: 42
                 //horizontalCenter: parent.horizontalCenter
             }
 
@@ -208,10 +211,7 @@ Page {
                         }
                     }
                 }
-
-
             ]
-
         }
         BusyIndicator {
             id:busyIndicator
@@ -225,16 +225,35 @@ Page {
             id : busyText
             //text: qsTr("Processing video encoding\nYou can hide app now, we inform you when it finished");
             text: counter
-            color: Theme.secondaryColor
+            color: Theme.highlightColor
+            font.pixelSize: Theme.fontSizeTiny
             anchors{
-                left: recordButton.left
-                right: recordButton.right
-                top : busyIndicator.bottom
-                //horizontalCenter: recordButton.horizontalCenter
+                horizontalCenter:recordButton.horizontalCenter
+                verticalCenter: recordButton.verticalCenter
             }
-            horizontalAlignment: Text.AlignRight
-            wrapMode: "WrapAtWordBoundaryOrAnywhere"
+            //horizontalAlignment: Text.AlignRight
+            //wrapMode: "WrapAtWordBoundaryOrAnywhere"
             //visible: pStopmotion.busyEncoding
+            /*
+            states:[
+                State {
+                    name:"Horizontal"
+                    when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
+                    AnchorChanges {
+                        target: busyText
+
+                        anchors {
+                            bottom:undefined
+                            right: recordButton.right
+                            top: recordButton.bottom
+                            topMargin: 70
+                            horizontalCenter:undefined
+                        }
+                    }
+                }
+            ]
+            */
+
         }
 
         state : "Ready"

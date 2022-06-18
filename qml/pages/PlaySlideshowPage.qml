@@ -21,9 +21,15 @@ Page {
     property string imageSource: ""
     property string imageSource2: ""
     property int imageIndex: -1
-    property bool slideshowRunning: false
+    property bool slideshowRunning:true
     property bool debug: true
 
+    onOrientationChanged: {
+
+        if (orientation===Orientation.Landscape){
+        } else if (orientation === Orientation.Portrait){
+        }
+    }
     onSlideshowRunningChanged: {
         if (debug) console.log("SlideshowRunning status changed: " + slideshowRunning)
         if (slideshowRunning) {
@@ -199,40 +205,39 @@ Page {
     /*
       Pause indicators.
       */
+    IconButton {
+        id: recordButton
+        icon.source: Qt.resolvedUrl("../img/play-button.png")
+        scale: 0.75
+        visible: !slideshowRunning
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            margins: 50
+            //horizontalCenter: parent.horizontalCenter
+        }
+        onClicked: {
+            toggleSlideshow()
+        }
+        states:[
+            State {
+                name:"Horizontal"
+                when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
 
-    Rectangle {
-        id: circlePause
-        width: 250
-        height: 250
-        radius: width/2
-        anchors.centerIn: parent
-        border.color: Theme.highlightColor
-        border.width: 5
-        opacity: 0.6
-        color: "transparent"
-        visible: !slideshowRunning
-    }
-    Rectangle {
-        id: leftPause
-        width: 40
-        height: 200
-        anchors.centerIn: parent
-        anchors.horizontalCenterOffset: -40
-        radius: 10
-        color: Theme.highlightColor
-        opacity: 0.9
-        visible: !slideshowRunning
-    }
-    Rectangle {
-        id: rightPause
-        width: 40
-        height: 200
-        anchors.centerIn: parent
-        anchors.horizontalCenterOffset: 40
-        radius: 10
-        color: Theme.highlightColor
-        opacity: 0.9
-        visible: !slideshowRunning
+                AnchorChanges {
+                    target: recordButton
+                    anchors {
+                        bottom: undefined
+                        right: parent.right
+                        horizontalCenter:undefined
+                        verticalCenter: parent.verticalCenter
+                    }
+                }
+            }
+
+
+        ]
+
     }
 
     // -------------------------------------------
