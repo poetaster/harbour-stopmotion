@@ -33,11 +33,11 @@ Page {
 
     property Item remorse
 
-    property bool debug: true
+    property bool debug: false
 
     // python / export specific vars
 
-    property string tempMediaFolderPath: StandardPaths.home + '/.cache/de.poetaster/harbour-stopmotion'
+    property string tempMediaFolderPath: StandardPaths.home + '/.cache/de.poetaster/stopmotion'
     property string tempMediaType : "mkv"
     property string ffmpeg_staticPath : "/usr/bin/ffmpeg"
     property string outputPathPy
@@ -457,7 +457,7 @@ Page {
 
             // Handlers do something to QML with received infos from Pythonfile (=pyotherside.send)
             setHandler('homePathFolder', function( homeDir ) {
-                tempMediaFolderPath = homeDir + "/.cache/de.poetaster/harbour-stopmotion/"
+                tempMediaFolderPath = homeDir + "/.cache/de.poetaster/stopmotion/"
                 //tempMediaFolderPath =  StandardPaths.temporary
                 saveMediaFolderPath =  homeDir + "/Videos"
                 homeDirectory = homeDir

@@ -31,7 +31,8 @@ DISTFILES += qml/harbour-stopmotion.qml \
     rpm/harbour-stopmotion.changes.in \
     rpm/harbour-stopmotion.changes.run.in \
     translations/*.ts \
-    harbour-stopmotion.desktop
+    harbour-stopmotion.desktop \
+    harbour-stopmotion2.png
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 

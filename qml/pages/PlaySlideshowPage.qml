@@ -22,7 +22,7 @@ Page {
     property string imageSource2: ""
     property int imageIndex: -1
     property bool slideshowRunning:true
-    property bool debug: true
+    property bool debug: false
 
     onOrientationChanged: {
 

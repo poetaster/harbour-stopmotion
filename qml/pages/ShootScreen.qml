@@ -11,7 +11,7 @@ Page {
     id: page
 
     allowedOrientations: Orientation.All
-    property bool debug: true
+    property bool debug: false
     property alias oCamera: camera
     property var pStopmotion
     property var savePath: Database.getProp('path')

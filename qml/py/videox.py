@@ -38,21 +38,21 @@ def createTmpAndSaveFolder ( tempMediaFolderPath, saveAudioFolderPath ):
 def deleteAllTMPFunction ( tempMediaFolderPath ):
     for i in os.listdir( "/"+tempMediaFolderPath ) :
         if (i.find(".tmp") != -1):
-            os.remove ( "/"+tempMediaFolderPath+i )
+            os.remove ( "/"+tempMediaFolderPath+'/'+i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".png") != -1): # also delete last preview png
-            os.remove ( "/"+tempMediaFolderPath+i )
+            os.remove ( "/"+tempMediaFolderPath+'/'+i )
         if (i.find(".jpg") != -1): # also delete last preview jpg
             os.remove ( tempMediaFolderPath + '/' + i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".trf") != -1): # also delete last vid.stab deshake filter analyzer file
-            os.remove ( "/"+tempMediaFolderPath+i )
+            os.remove ( "/"+tempMediaFolderPath+'/'+i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".wav") != -1): # also delete last recordings
-            os.remove ( "/"+tempMediaFolderPath+i )
+            os.remove ( "/"+tempMediaFolderPath+'/'+i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".srt") != -1): # also delete last manual subtitle file
-            os.remove ( "/"+tempMediaFolderPath+i )
+            os.remove ( "/"+tempMediaFolderPath+'/'+i )
             pyotherside.send('tempFilesDeleted', i )
 
 def deleteLastTmpFunction ( lastTmpMedia2delete ):
