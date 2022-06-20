@@ -15,6 +15,7 @@ TARGET = harbour-stopmotion
 CONFIG += sailfishapp_qml
 
 DISTFILES += qml/harbour-stopmotion.qml \
+    qml/components/Banner.qml \
     qml/cover/CoverPage.qml \
     qml/pages/*.qml \
     qml/img/*.png \
@@ -25,6 +26,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/*.qml \
     qml/utils/*.js \
     qml/sound/*.wav \
+    qml/py/*.py \
     rpm/harbour-stopmotion.spec \
     rpm/harbour-stopmotion.changes.in \
     rpm/harbour-stopmotion.changes.run.in \

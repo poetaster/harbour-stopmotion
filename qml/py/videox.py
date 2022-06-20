@@ -2,16 +2,19 @@
 
 import pyotherside
 import time
-import os
+import os,sys, logging
 import subprocess, signal
 import random
 from pathlib import Path
+import shutil
 
 # other for progressbar
 import re
 #from collections.abc import Iterator
 from typing import Iterator
 
+loglevel=os.environ.get("LOGLEVEL", "INFO")
+logging.basicConfig(stream=sys.stderr, level=loglevel)
 
 # global variables
 currentFunctionErrorName = ""
@@ -33,14 +36,14 @@ def createTmpAndSaveFolder ( tempMediaFolderPath, saveAudioFolderPath ):
         pyotherside.send('folderExistence', )
 
 def deleteAllTMPFunction ( tempMediaFolderPath ):
-    # pkill not allowed
-    #subprocess.run([ "pkill", "-f", "ffmpeg" ])
     for i in os.listdir( "/"+tempMediaFolderPath ) :
         if (i.find(".tmp") != -1):
             os.remove ( "/"+tempMediaFolderPath+i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".png") != -1): # also delete last preview png
             os.remove ( "/"+tempMediaFolderPath+i )
+        if (i.find(".jpg") != -1): # also delete last preview jpg
+            os.remove ( tempMediaFolderPath + '/' + i )
             pyotherside.send('tempFilesDeleted', i )
         if (i.find(".trf") != -1): # also delete last vid.stab deshake filter analyzer file
             os.remove ( "/"+tempMediaFolderPath+i )
@@ -610,7 +613,34 @@ def imageFrei0rFunction ( ffmpeg_staticPath, inputPathPy, outputPathPy, applyEff
 
 
 # COLLAGE FUNCTIONS
-# ##############################################################################################################################################################################
+# ########################################################################################################################
+
+# Filmstrips, like createSlideshowFunction
+# ffmpeg -framerate 10 -pattern_type glob -i 'Raupe000*.jpg'  -c:v mjpeg  -pix_fmt yuv420p out.mp4
+# see: https://trac.ffmpeg.org/wiki/Slideshow
+
+def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPaths, newFileName ):
+    global success
+    global currentFunctionErrorName
+    currentFunctionErrorName = "createFilmstripFunction"
+    allSelectedPathsList = list( allSelectedPaths.split(";;") )
+    del allSelectedPathsList[-1] # remove last empty field
+    inputFilesList = []
+    inputFilesList.clear()
+
+
+    #with open("/"+outputPathPy+"/tmpSlides.txt", "+w") as tmpSlides:
+        #subtitleText = srtFile.read()
+    for i in range (0, len(allSelectedPathsList)) :
+        message = shutil.copy2(str(allSelectedPathsList[i]), tempMediaFolderPath)
+
+    #message = subprocess.run([ "ffmpeg", "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+'/*.jpg',"-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ], shell = False )
+    #pyotherside.send('errorOccured', message )
+
+    for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10",  "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
+        pyotherside.send('progressPercentage', progress)
+    if "true" in success :
+        pyotherside.send('exportClipCreated', outputPathPy )
 
 def createSlideshowFunction ( ffmpeg_staticPath, outputPathPy, allSelectedPaths, allSelectedDurations, allSelectedTransitions, allSelectedTransitionDurations, targetWidth, targetHeight, newFileName, panZoom ):
     global success
@@ -1175,6 +1205,7 @@ def run_ffmpeg_command(cmd: "list[str]") -> Iterator[int]:
 
         #pyotherside.send('runDebug_', line)
 
+
         if line == "" and p.poll() is not None:
             break
         stderr.append(line.strip())
@@ -1191,9 +1222,6 @@ def run_ffmpeg_command(cmd: "list[str]") -> Iterator[int]:
     if p.returncode != 0:
         success = "false"
 
-        # pkill not allowed
-        #subprocess.run([ "pkill", "-f", "ffmpeg" ])
-
         if "imageLUT3DFunction" in currentFunctionErrorName:
             pyotherside.send('errorOccured', "PNG not compatible.\nConversion failed." )
         elif "overlayOldMovieFunction" in currentFunctionErrorName:
@@ -1204,8 +1232,6 @@ def run_ffmpeg_command(cmd: "list[str]") -> Iterator[int]:
             pyotherside.send('errorOccured', "An error occured with this function.\n"  + currentFunctionErrorName + "\nKindly report this bug on github." )
     else:
         success = "true"
-        # not allowed
-        #subprocess.run([ "pkill", "-f", "ffmpeg" ])
     yield 100
 
 
