@@ -83,13 +83,13 @@ Page {
                 }
             }
 
-            if (musicModel.count > 0) {
+            /*if (musicModel.count > 0) {
                 backgroundPlaylist.clear()
                 for (var i = 0; i < musicModel.count; ++i) {
                     console.log("Add music file to playlist: " + musicModel.get(i).url)
                     backgroundPlaylist.addItem(musicModel.get(i).url)
                 }
-            }
+            }*/
 
             slideshowRunning = true
             blanking.preventBlanking = true
