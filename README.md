@@ -2,4 +2,7 @@
 
 A simple qt/qml stopmotion photo app for creating time series of doing animations on SFOS.
 
-It is based on a qml app that was once available for SFOS called, Timelapse.
+Parts of the Recording screen are based on a qml app that was once available for SFOS called, Timelapse. 
+
+A number of elements from the Slideshow views originate with Joni Korhonen Slideshow for SFOF:
+https://github.com/pinniini/harbour-slideshow

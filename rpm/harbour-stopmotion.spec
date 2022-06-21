@@ -36,6 +36,7 @@ Screenshots:
  - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-01.png
  - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-02.png
  - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-03.png
+ - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-04.png
 Url:
   Homepage: https://github.com/poetaster/harbour-stopmotion
   Donation: https://www.paypal.me/poetasterFOSS
