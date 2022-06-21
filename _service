@@ -1,0 +1,9 @@
+<services>
+  <service name="tar_git">
+    <param name="url">https://github.com/poetaster/harbour-stopmotion.git</param>
+    <param name="branch">main</param>
+   <param name="revision">0.1.0</param>
+    <param name="debian">N</param>
+    <param name="dumb">N</param>
+  </service>
+</services>
