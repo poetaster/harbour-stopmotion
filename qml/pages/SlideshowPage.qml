@@ -47,7 +47,7 @@ Page {
     property bool finishedLoading: true
     property int processedPercent: 0
     property int undoNr: 0
-    property int portrait
+    property string portrait: "1080"
 
     onStatusChanged: {
         if(status === PageStatus.Activating)
@@ -343,7 +343,7 @@ Page {
                         }
                     }
                 }
-
+                /* we need this to obtain the orientation to pass to ffmpeg */
                 Image {
                     id: infoLoad
                     visible: false
@@ -352,10 +352,10 @@ Page {
                     fillMode: Image.PreserveAspectFit
                     onStatusChanged: {
                         if (status == Image.Ready) {
-                           console.log('Loaded: sourceSize ==', sourceSize);
-                           console.log('Loaded: Height ==', height);
-                           console.log('Loaded: implicitHeight ==', implicitHeight);
-                            if (height === 1920)  portrait = 1
+                           if (debug) console.log('Loaded: sourceSize ==', sourceSize);
+                           if (debug) console.log('Loaded: Height ==', height);
+                           if (debug) console.log('Loaded: implicitHeight ==', implicitHeight);
+                            if (height === 1920)  portrait = "1920"
                         }
                     }
                 }

@@ -53,7 +53,9 @@ Page {
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: Theme.fontSizeMedium
             color: Theme.secondaryColor
-            text: + qsTr(" © 2022 Mark Washeim")
+            text: qsTr(" © 2022 Mark Washeim \n" ) +
+                  qsTr("some parts inspired by Joni Korhonen: \n ") +
+                  qsTr("https://github.com/pinniini/harbour-slideshow")
         }
 
         Item {
@@ -86,7 +88,6 @@ Page {
             text: "<a href=\"https://github.com/poetaster/harbour-stopmotion\">Source: github</a>"
             /*text: "<style>a:link{color: " + Theme.highlightColor + ";}</style>" +  "<a href=\"https://github.com/poetaster/harbour-stopmotion\">Source: github</a>" */
             onLinkActivated: {
-                console.log("Opening external browser: " + link);
                 Qt.openUrlExternally(link)
             }
         }

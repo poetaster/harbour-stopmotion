@@ -16,7 +16,6 @@ CoverBackground {
     }
     CoverPlaceholder {
         icon.source: "harbour-stopmotion.png"
-        //text: "Timelapse"
     }
     // Slideshow image.
     Image {

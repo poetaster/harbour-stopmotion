@@ -634,7 +634,7 @@ def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPa
     #message = subprocess.run([ "ffmpeg", "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+'/*.jpg',"-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ], shell = False )
     #pyotherside.send('errorOccured', message )
 
-    if portrait == 1:
+    if portrait == "1920":
         for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
     else:
