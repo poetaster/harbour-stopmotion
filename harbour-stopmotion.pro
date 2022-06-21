@@ -17,6 +17,7 @@ CONFIG += sailfishapp_qml
 DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/Banner.qml \
     qml/cover/CoverPage.qml \
+    qml/cover/harbour-stopmotion.png \
     qml/pages/*.qml \
     qml/img/*.png \
     qml/pages/CameraButton.qml \
@@ -31,8 +32,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     rpm/harbour-stopmotion.changes.in \
     rpm/harbour-stopmotion.changes.run.in \
     translations/*.ts \
-    harbour-stopmotion.desktop \
-    harbour-stopmotion2.png
+    harbour-stopmotion.desktop
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 172x172
 

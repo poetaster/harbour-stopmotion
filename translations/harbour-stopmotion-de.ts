@@ -21,6 +21,29 @@
     </message>
 </context>
 <context>
+    <name>AboutPage</name>
+    <message>
+        <source>About Stopmotion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A Stopmotion Animation app.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> © 2022 Mark Washeim</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stopmotion is licensed under the terms of </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the GNU General Public License v3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>CoverPage</name>
     <message>
         <source>Stopmotion</source>
@@ -141,6 +164,10 @@
     </message>
     <message>
         <source>Exported to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

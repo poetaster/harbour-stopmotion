@@ -619,7 +619,7 @@ def imageFrei0rFunction ( ffmpeg_staticPath, inputPathPy, outputPathPy, applyEff
 # ffmpeg -framerate 10 -pattern_type glob -i 'Raupe000*.jpg'  -c:v mjpeg  -pix_fmt yuv420p out.mp4
 # see: https://trac.ffmpeg.org/wiki/Slideshow
 
-def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPaths, newFileName ):
+def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPaths, newFileName, portrait ):
     global success
     global currentFunctionErrorName
     currentFunctionErrorName = "createFilmstripFunction"
@@ -627,18 +627,20 @@ def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPa
     del allSelectedPathsList[-1] # remove last empty field
     inputFilesList = []
     inputFilesList.clear()
-
-
     #with open("/"+outputPathPy+"/tmpSlides.txt", "+w") as tmpSlides:
         #subtitleText = srtFile.read()
     for i in range (0, len(allSelectedPathsList)) :
         message = shutil.copy2(str(allSelectedPathsList[i]), tempMediaFolderPath)
-
     #message = subprocess.run([ "ffmpeg", "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+'/*.jpg',"-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ], shell = False )
     #pyotherside.send('errorOccured', message )
 
-    for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10",  "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
-        pyotherside.send('progressPercentage', progress)
+    if portrait == 1:
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
+            pyotherside.send('progressPercentage', progress)
+    else:
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
+            pyotherside.send('progressPercentage', progress)
+
     if "true" in success :
         pyotherside.send('exportClipCreated', outputPathPy )
 

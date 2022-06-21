@@ -66,18 +66,21 @@ Page {
         if (orientation===Orientation.Landscape){
             if (debug) console.log("inverted image");
             camera.imageCapture.setMetadata("Orientation",0);
+            //portrait = 0
             // we don't need to
             //camera.imageCapture.resolution = "1920X1080"
             //camera.viewfinder.resolution = "1920x1080"
         } else if (orientation === Orientation.Portrait){
             camera.imageCapture.setMetadata("Orientation",270);
+            //portrait = 1
             //we don't need to
             //camera.imageCapture.resolution = "1080X1920"
-            //camera.viewfinder.resolution = "1080x1920"
+            //camera.viewfinder.resolution = "1080x19 -select_streams v:0 -show_entries 20"
             //look at piggz getNearestViewFinderResolution();
 
         }
     }
+
 
     Component {
         id: internalPicker
@@ -478,7 +481,7 @@ Page {
                 //camera.setCameraState()
                 camera.unlock()
                 cameraState.slidesShow(true)
-                slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true}))
+                slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true }))
                 //dialog.accepted.connect(function() { //addSlideshow(dialog.slideshow); }
                 //   )
             }

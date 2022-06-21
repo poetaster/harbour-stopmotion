@@ -305,7 +305,7 @@ Page {
     }
 
     function nextPicture() {
-        console.log("nextPicture()")
+        if (debug) console.log("nextPicture()")
         ++imageIndex
 
         blanking.preventBlanking = true

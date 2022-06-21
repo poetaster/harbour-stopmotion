@@ -9,12 +9,14 @@ CoverBackground {
 
     Label {
         id: label
-        anchors.centerIn: parent
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottomMargin: 200
         text: qsTr("Stopmotion")
     }
     CoverPlaceholder {
-        icon.source: "image://theme/icon-m-camera"
-        text: "Timelapse"
+        icon.source: "harbour-stopmotion.png"
+        //text: "Timelapse"
     }
     // Slideshow image.
     Image {

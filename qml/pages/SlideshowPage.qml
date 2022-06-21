@@ -47,6 +47,7 @@ Page {
     property bool finishedLoading: true
     property int processedPercent: 0
     property int undoNr: 0
+    property int portrait
 
     onStatusChanged: {
         if(status === PageStatus.Activating)
@@ -158,10 +159,18 @@ Page {
             }
 */
             MenuItem {
+                id: aboutPage
+                text: qsTr("About")
+                onClicked: {
+                    pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
+                }
+            }
+            MenuItem {
                 id: menuPictures
                 text: qsTr("Add files")
                 onClicked: pageStack.push(multiImagePickerDialog)
             }
+
         }
 
         PushUpMenu {
@@ -317,6 +326,9 @@ Page {
                         height: slideshowDialog.imageWidth
                         sourceSize.width: width
                         sourceSize.height: height
+                        onStatusChanged: {
+                            infoLoad.source = url
+                        }
 
                         MouseArea {
                             anchors.fill: parent
@@ -328,6 +340,22 @@ Page {
                             onClicked: {
                                 pageStack.push(Qt.resolvedUrl("ImagePage.qml"), {'imageUrl': url})
                             }
+                        }
+                    }
+                }
+
+                Image {
+                    id: infoLoad
+                    visible: false
+                    asynchronous: true
+                    autoTransform: true
+                    fillMode: Image.PreserveAspectFit
+                    onStatusChanged: {
+                        if (status == Image.Ready) {
+                           console.log('Loaded: sourceSize ==', sourceSize);
+                           console.log('Loaded: Height ==', height);
+                           console.log('Loaded: implicitHeight ==', implicitHeight);
+                            if (height === 1920)  portrait = 1
                         }
                     }
                 }
@@ -1191,7 +1219,8 @@ Page {
                 var addPath = (imageListModel.get(i).url).toString().replace(/^(file:\/{2})|(qrc:\/{2})|(http:\/{2})/,"")
                 allSelectedPathsSlideshow = allSelectedPathsSlideshow + addPath + ";;"
             }
-            call("videox.createFilmstripFunction", [ ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPathsSlideshow, newFileName, ])
+            // need to add potrait flag.
+            call("videox.createFilmstripFunction", [ ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPathsSlideshow, newFileName, portrait ])
         }
 
         function createSlideshowFunction() {

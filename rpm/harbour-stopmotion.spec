@@ -20,8 +20,26 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Stopmotion is an application for makeing stopmotion animations.
+Stopmotion is an application for making stopmotion animations.
 
+%if "%{?vendor}" == "chum"
+PackageName: Stopmotion
+Type: desktop-application
+Categories:
+ - Video
+ - Graphics
+DeveloperName: Mark Washeim
+Custom:
+ - Repo: https://github.com/poetaster/harbour-stopmotion
+Icon: https://raw.githubusercontent.com/poetaster/harbour-stopmotion/master/icons/172x172/harbour-stopmotion.png
+Screenshots:
+ - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-01.png
+ - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-02.png
+ - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-03.png
+Url:
+  Homepage: https://github.com/poetaster/harbour-stopmotion
+  Donation: https://www.paypal.me/poetasterFOSS
+%endif
 
 %prep
 %setup -q -n %{name}-%{version}
