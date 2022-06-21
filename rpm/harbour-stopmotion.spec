@@ -31,7 +31,7 @@ Categories:
 DeveloperName: Mark Washeim
 Custom:
  - Repo: https://github.com/poetaster/harbour-stopmotion
-Icon: https://raw.githubusercontent.com/poetaster/harbour-stopmotion/master/icons/172x172/harbour-stopmotion.png
+Icon: https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/icons/172x172/harbour-stopmotion.png
 Screenshots:
  - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-01.png
  - https://raw.githubusercontent.com/poetaster/harbour-stopmotion/main/screenshot-02.png
