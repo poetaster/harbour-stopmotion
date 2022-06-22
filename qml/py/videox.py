@@ -619,7 +619,7 @@ def imageFrei0rFunction ( ffmpeg_staticPath, inputPathPy, outputPathPy, applyEff
 # ffmpeg -framerate 10 -pattern_type glob -i 'Raupe000*.jpg'  -c:v mjpeg  -pix_fmt yuv420p out.mp4
 # see: https://trac.ffmpeg.org/wiki/Slideshow
 
-def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPaths, newFileName, portrait ):
+def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPaths, newFileName, portrait, sFps ):
     global success
     global currentFunctionErrorName
     currentFunctionErrorName = "createFilmstripFunction"
@@ -635,10 +635,10 @@ def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPa
     #pyotherside.send('errorOccured', message )
 
     if portrait == "1920":
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
     else:
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", "10", "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", "10", "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
 
     if "true" in success :

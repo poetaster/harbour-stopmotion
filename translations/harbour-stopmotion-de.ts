@@ -31,15 +31,25 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source> © 2022 Mark Washeim</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Stopmotion is licensed under the terms of </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>the GNU General Public License v3.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> © 2022 Mark Washeim 
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>some parts inspired by Joni Korhonen: 
+ </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>https://github.com/pinniini/harbour-slideshow</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

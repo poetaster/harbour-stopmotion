@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Nemo.Thumbnailer 1.0
 import "../components"
-import "../utils/localdb.js" as DB
+import "../utils/localdb.js" as Database
 import io.thp.pyotherside 1.5
 
 Page {
@@ -48,6 +48,7 @@ Page {
     property int processedPercent: 0
     property int undoNr: 0
     property string portrait: "1080"
+    property int saveFps:5
 
     onStatusChanged: {
         if(status === PageStatus.Activating)
@@ -212,6 +213,28 @@ Page {
                 }
                 width: parent.width - Theme.paddingMedium
             }
+
+            Slider {
+                id: sFps
+                label: "FPS"
+                width: parent.width - Theme.paddingLarge
+                minimumValue: 1
+                maximumValue: 30
+                value: 5
+                stepSize: 1
+                valueText: sliderValue
+
+                onReleased: {
+                    Database.setProp('saveFps',String(sliderValue))
+                    saveFps = sFps.sliderValue
+                }
+
+                Component.onCompleted: {
+                    value = Database.getProp('saveFps')
+                    saveFps = value
+                }
+            }
+
             /*
             CollapsingHeader {
                 id: slideshowBackgroundMusicCollapsingHeader
@@ -1220,7 +1243,7 @@ Page {
                 allSelectedPathsSlideshow = allSelectedPathsSlideshow + addPath + ";;"
             }
             // need to add potrait flag.
-            call("videox.createFilmstripFunction", [ ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPathsSlideshow, newFileName, portrait ])
+            call("videox.createFilmstripFunction", [ ffmpeg_staticPath, outputPathPy, tempMediaFolderPath, allSelectedPathsSlideshow, newFileName, portrait, saveFps.toString() ])
         }
 
         function createSlideshowFunction() {

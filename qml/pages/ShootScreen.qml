@@ -84,6 +84,7 @@ Page {
 
     Component {
         id: internalPicker
+        
         FolderPickerDialog {
             id: folderiDialog
             title: "Save to:"
