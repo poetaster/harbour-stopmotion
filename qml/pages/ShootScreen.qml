@@ -20,6 +20,8 @@ Page {
     property int counter: 0
     property string recordPath : StandardPaths.pictures+"/Stopmotion"
 
+    property bool debug: false
+
     QtObject {
         id:d
         property real cDOCK_PANEL_SIZE: 800

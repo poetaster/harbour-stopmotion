@@ -2,25 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name></name>
-    <message id="image-info-error">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="slideshow-images">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="menu-clear">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="action-clearing-images">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>AboutPage</name>
     <message>
         <source>About Stopmotion</source>
