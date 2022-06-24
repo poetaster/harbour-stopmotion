@@ -17,7 +17,7 @@ Page {
     property var seriesName
     property int seriesCounter: 0
     property int counter: 0
-    property string recordPath : StandardPaths.pictures+"/Stopmotion"
+    property string recordPath : StandardPaths.pictures
 
     property bool debug: false
 
