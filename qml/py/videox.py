@@ -2,7 +2,7 @@
 
 import pyotherside
 import time
-import os,sys, logging
+import os,sys
 import subprocess, signal
 import random
 from pathlib import Path
@@ -12,9 +12,6 @@ import shutil
 import re
 #from collections.abc import Iterator
 from typing import Iterator
-
-loglevel=os.environ.get("LOGLEVEL", "INFO")
-logging.basicConfig(stream=sys.stderr, level=loglevel)
 
 # global variables
 currentFunctionErrorName = ""

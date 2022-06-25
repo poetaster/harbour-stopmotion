@@ -16,18 +16,18 @@ CONFIG += sailfishapp_qml
 
 DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/Banner.qml \
+    qml/components/CollapsingHeader.qml \
     qml/cover/CoverPage.qml \
     qml/cover/harbour-stopmotion.png \
-    qml/pages/*.qml \
-    qml/img/*.png \
+    qml/pages/ShootScreen.qml \
     qml/pages/CameraButton.qml \
     qml/pages/ImagePage.qml \
     qml/pages/SlideShowPage.qml \
     qml/pages/PlaySlideShowPage.qml \
-    qml/components/*.qml \
-    qml/utils/*.js \
+    qml/img/*.png \
+    qml/utils/localdb.js \
     qml/sound/*.wav \
-    qml/py/*.py \
+    qml/py/videox.py \
     rpm/harbour-stopmotion.spec \
     rpm/harbour-stopmotion.changes.in \
     rpm/harbour-stopmotion.changes.run.in \

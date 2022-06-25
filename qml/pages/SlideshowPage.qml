@@ -177,7 +177,7 @@ Page {
         PushUpMenu {
             MenuItem {
                 id: menuStartSlideshow
-                text: qsTr("Sart slideshow")
+                text: qsTr("Start slideshow")
                 enabled: imageListModel.count > 0
                 onClicked: {
                     if (debug) console.log("Start slideshow...")
