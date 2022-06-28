@@ -7,18 +7,6 @@
         <source></source>
         <translation type="unfinished"></translation>
     </message>
-    <message id="slideshow-images">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="menu-clear">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message id="action-clearing-images">
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>AboutPage</name>
@@ -107,77 +95,6 @@
     </message>
     <message>
         <source>Two</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>SlideshowPage</name>
-    <message>
-        <source>Add files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Sart slideshow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Slideshow filename</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>File to save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Audio extracted to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This seems to be a large file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>For speed convenience you may scale it down first.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ERROR!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extracted to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use &apos;delete&apos; in file menu.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WARNING!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Large output resolution detected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please reduce to max 1920x1920 pixels.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pthon Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exported to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>About</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

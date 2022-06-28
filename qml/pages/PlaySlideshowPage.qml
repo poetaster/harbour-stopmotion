@@ -50,6 +50,9 @@ Page {
     property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
     property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
+    property int fpsMode
+    property int saveFPS
+    property bool debug: true
 
     // Signals.
     // Notify cover about image change.
@@ -61,18 +64,31 @@ Page {
     onStatusChanged: {
         if(status === PageStatus.Activating)
         {
-            console.log("Page activating...")
-            console.log(slideshowOrderArray)
+            if (debug) console.log("Page activating...")
+            if (debug) console.log(slideshowOrderArray)
+
+            fpsMode = Database.getProp('fpsMode')
+            loop = Database.getProp('loop')
+            saveFPS = Database.getProp('saveFPS')
+
+            if (fpsMode == 0) {
+                slideshowInterval = 1000 / saveFPS
+                if (debug) console.log(slideshowInterval)
+            } else {
+                slideshowInterval = 1000 * saveFPS
+                if (debug) console.log(slideshowInterval)
+
+            }
 
             if (slideshowOrderArray.length != imageModel.count) {
-                console.error("Order array's and image model's sizes does not match. Expect wonky behavior...")
+                if (debug) console.error("Order array's and image model's sizes does not match. Expect wonky behavior...")
             }
 
             if (slideshowOrderArray.length == 0) {
                 for (var j = 0; j < imageModel.count; ++j) {
                     slideshowOrderArray.push(j)
                 }
-                console.log(slideshowOrderArray)
+                if (debug) console.log(slideshowOrderArray)
             }
 
             if (imageModel.count > 0) {

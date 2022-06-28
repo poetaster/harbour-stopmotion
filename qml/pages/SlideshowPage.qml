@@ -2,6 +2,7 @@ import QtQuick 2.5
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Nemo.Thumbnailer 1.0
+
 import "../components"
 import "../utils/localdb.js" as Database
 import io.thp.pyotherside 1.5
@@ -49,6 +50,8 @@ Page {
     property int undoNr: 0
     property string portrait: "1080"
     property int saveFps:5
+    property int fpsMode: 0
+    property int loop: 0
 
     onStatusChanged: {
         if(status === PageStatus.Activating)
@@ -182,7 +185,7 @@ Page {
                 onClicked: {
                     if (debug) console.log("Start slideshow...")
                     //playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'musicModel': backgroundMusicModel, 'slideshowOrderArray': getSlideshowOrder()})
-                    playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel})
+                    playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode, 'loop':loop})
                     mainWinConnections.target = playSlideshowPage
                 }
             }
@@ -213,7 +216,6 @@ Page {
                 }
                 width: parent.width - Theme.paddingMedium
             }
-
             Slider {
                 id: sFps
                 label: "FPS"
@@ -223,15 +225,53 @@ Page {
                 value: 5
                 stepSize: 1
                 valueText: sliderValue
-
                 onReleased: {
                     Database.setProp('saveFps',String(sliderValue))
                     saveFps = sFps.sliderValue
                 }
-
                 Component.onCompleted: {
                     value = Database.getProp('saveFps')
                     saveFps = value
+                }
+            }
+            Row {
+                width: parent.width
+                ComboBox {
+                    id:fpsModeSelector
+                    width: parent.width * .66
+                    menu: ContextMenu {
+                        MenuItem { text: "Frames per second" ;
+                            onClicked: fpsMode = "fps" }
+                        MenuItem { text: "Seconds per frame" ;
+                            onClicked: fpsMode = "spf" }
+
+                    }
+                    onCurrentIndexChanged: {
+                        console.log(currentIndex)
+                        Database.setProp('fpsMode',String(currentIndex))
+                    }
+                    Component.onCompleted: {
+                        fpsMode = Database.getProp('fpsMode')
+                        fpsModeSelector.currentIndex = fpsMode
+                    }
+                }
+                Switch {
+                    id: loopSwitch
+                    width: parent.width * .33
+                    Label {
+                        anchors.verticalCenter:   parent.Center
+                        anchors.left: parent.left
+                        text: "Loop?"
+                    }
+                    onStateChanged:  {
+                        console.log(loopSwitch.on)
+                        Database.setProp('loop',String(loopSwitch.on))
+                    }
+                    Component.onCompleted: {
+                        loop = Database.getProp('loop')
+                        Database.getProp('loop')
+
+                    }
                 }
             }
 

@@ -344,7 +344,6 @@ Page {
                 left: parent.left
                 right:parent.right
             }
-
             label: "Delay"
             menu: ContextMenu {
                 MenuItem { text: "1 min" ;
