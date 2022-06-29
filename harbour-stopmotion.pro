@@ -26,6 +26,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/pages/PlaySlideShowPage.qml \
     qml/img/*.png \
     qml/utils/localdb.js \
+    qml/utils/constants.js \
     qml/sound/*.wav \
     qml/py/videox.py \
     rpm/harbour-stopmotion.spec \

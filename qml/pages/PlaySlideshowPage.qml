@@ -2,9 +2,10 @@ import QtQuick 2.5
 import Sailfish.Silica 1.0
 import Nemo.KeepAlive 1.2
 import QtMultimedia 5.6
-//import QtGraphicalEffects 1.0
 import QtQuick.Layouts 1.0
+import "../utils/localdb.js" as Database
 
+//import QtGraphicalEffects 1.0
 //import "../constants.js" as Constants
 
 Page {
@@ -21,8 +22,24 @@ Page {
     property string imageSource2: ""
     property int imageIndex: -1
     property bool slideshowRunning:true
+    property ListModel imageModel
+    property ListModel musicModel
+    property var slideshowOrderArray: []
+    property bool firstLoaded: false
 
-    property bool debug: false
+    // Settings.
+    property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
+    property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
+    property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
+    property int fpsMode
+    property int saveFps
+    property bool debug: true
+
+    // Signals.
+    // Notify cover about image change.
+    signal imageChanged(string url)
+    // Notify about slideshow running status change.
+    signal slideshowRunningToggled(bool runningStatus)
 
     onOrientationChanged: {
 
@@ -41,24 +58,6 @@ Page {
         slideshowRunningToggled(slideshowRunning)
     }
 
-    property ListModel imageModel
-    property ListModel musicModel
-    property var slideshowOrderArray: []
-    property bool firstLoaded: false
-
-    // Settings.
-    property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
-    property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
-    property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
-    property int fpsMode
-    property int saveFPS
-    property bool debug: true
-
-    // Signals.
-    // Notify cover about image change.
-    signal imageChanged(string url)
-    // Notify about slideshow running status change.
-    signal slideshowRunningToggled(bool runningStatus)
 
     // React on status changes.
     onStatusChanged: {
@@ -69,14 +68,18 @@ Page {
 
             fpsMode = Database.getProp('fpsMode')
             loop = Database.getProp('loop')
-            saveFPS = Database.getProp('saveFPS')
+            saveFps = Database.getProp('saveFps')
+
+            if (debug) console.log('fps: ' + fpsMode)
+            if (debug) console.log('saveps:' + saveFps)
+            if (debug) console.log('loop:' + loop)
 
             if (fpsMode == 0) {
-                slideshowInterval = 1000 / saveFPS
-                if (debug) console.log(slideshowInterval)
+                slideshowInterval = 1000 / saveFps
+                if (debug) console.debug("interval: " + slideshowInterval)
             } else {
-                slideshowInterval = 1000 * saveFPS
-                if (debug) console.log(slideshowInterval)
+                slideshowInterval = 1000 * saveFps
+                if (debug) console.debug("interval: "+ slideshowInterval)
 
             }
 
@@ -130,7 +133,7 @@ Page {
         id: blanking
     }
 
-    Audio {
+   /* Audio {
         id: backgroundMusic
         autoPlay: false
         audioRole: Audio.MusicRole
@@ -138,7 +141,7 @@ Page {
             id: backgroundPlaylist
             playbackMode: loopMusic ? Playlist.Loop : Playlist.Sequential
         }
-    }
+    }*/
 
     PageHeader {
         id: header
@@ -324,7 +327,7 @@ Page {
         if (debug) console.log("nextPicture()")
         ++imageIndex
 
-        blanking.preventBlanking = true
+        //blanking.preventBlanking = true
 
         if (imageIndex == imageModel.count) {
             imageIndex = 0;

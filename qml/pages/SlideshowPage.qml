@@ -5,6 +5,7 @@ import Nemo.Thumbnailer 1.0
 
 import "../components"
 import "../utils/localdb.js" as Database
+import "../utils/constants.js" as Constants
 import io.thp.pyotherside 1.5
 
 Page {
@@ -34,7 +35,7 @@ Page {
 
     property Item remorse
 
-    property bool debug: false
+    property bool debug: true
 
     // python / export specific vars
 
@@ -51,7 +52,7 @@ Page {
     property string portrait: "1080"
     property int saveFps:5
     property int fpsMode: 0
-    property int loop: 0
+    property int loop: 1
 
     onStatusChanged: {
         if(status === PageStatus.Activating)
@@ -185,7 +186,7 @@ Page {
                 onClicked: {
                     if (debug) console.log("Start slideshow...")
                     //playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'musicModel': backgroundMusicModel, 'slideshowOrderArray': getSlideshowOrder()})
-                    playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode, 'loop':loop})
+                    playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                     mainWinConnections.target = playSlideshowPage
                 }
             }
@@ -218,7 +219,7 @@ Page {
             }
             Slider {
                 id: sFps
-                label: "FPS"
+                label: "FPS/SPF"
                 width: parent.width - Theme.paddingLarge
                 minimumValue: 1
                 maximumValue: 30
@@ -255,22 +256,24 @@ Page {
                         fpsModeSelector.currentIndex = fpsMode
                     }
                 }
-                Switch {
+
+                 ComboBox{
                     id: loopSwitch
                     width: parent.width * .33
-                    Label {
-                        anchors.verticalCenter:   parent.Center
-                        anchors.left: parent.left
-                        text: "Loop?"
+                    menu: ContextMenu {
+                        MenuItem { text: "Loop off" ;
+                            onClicked: loop = false }
+                        MenuItem { text: "Loop on" ;
+                            onClicked: loop = true }
+
                     }
-                    onStateChanged:  {
-                        console.log(loopSwitch.on)
-                        Database.setProp('loop',String(loopSwitch.on))
+                    onCurrentIndexChanged: {
+                        console.log(currentIndex)
+                        Database.setProp('loop',String(currentIndex))
                     }
                     Component.onCompleted: {
                         loop = Database.getProp('loop')
-                        Database.getProp('loop')
-
+                        loopSwitch.currentIndex = loop
                     }
                 }
             }
@@ -536,8 +539,14 @@ Page {
 */
 
     function getSlideshowOrder() {
-        return Constants.getSlideshowOrder(imageListModel.count, Settings.getBooleanSetting(Constants.randomKey, false))
+        var count = imageListModel.count
+        var arr = Array(count)
+        for (var j = 0; j < arr.length; ++j) {
+          arr[j] = j
+        }
+        return arr
     }
+
 
     // These are ALL the functions from clipper (Videoworks).
     Python {
