@@ -33,7 +33,7 @@ Page {
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
-    property bool debug: true
+    property bool debug: false
 
     // Signals.
     // Notify cover about image change.
@@ -160,7 +160,7 @@ Page {
         id: slideshowPicture
         anchors.fill: parent
         asynchronous: true
-        autoTransform: true
+        autoTransform: false
         cache: false
         clip: true
         fillMode: Image.PreserveAspectFit
@@ -193,12 +193,12 @@ Page {
         }
     }
 
-    // Second image.
+    // Secondimage.
     Image {
         id: slideshowPicture2
         anchors.fill: parent
         asynchronous: true
-        autoTransform: true
+        autoTransform: false
         cache: false
         clip: true
         fillMode: Image.PreserveAspectFit
@@ -314,6 +314,7 @@ Page {
         }
     }
 
+
     /*
       Functions.
       */
@@ -327,7 +328,7 @@ Page {
         if (debug) console.log("nextPicture()")
         ++imageIndex
 
-        //blanking.preventBlanking = true
+        blanking.preventBlanking = true
 
         if (imageIndex == imageModel.count) {
             imageIndex = 0;
@@ -342,6 +343,7 @@ Page {
         imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
 
         // Set picture visibilities.
+
         if(slideshowPicture.visible)
         {
             slideshowPicture.visible = false
@@ -364,6 +366,7 @@ Page {
             else
                 imageSource2 = imageModel.get(slideshowOrderArray[imageIndex + 1]).url
         }
+
     }
 
 

@@ -19,6 +19,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/CollapsingHeader.qml \
     qml/cover/CoverPage.qml \
     qml/cover/harbour-stopmotion.png \
+    qml/pages/CanvasSlideshowPage.qml \
     qml/pages/ShootScreen.qml \
     qml/pages/CameraButton.qml \
     qml/pages/ImagePage.qml \

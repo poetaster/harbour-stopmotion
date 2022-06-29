@@ -180,5 +180,9 @@
         <source>Pthon Error</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Start canvas slideshow</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
