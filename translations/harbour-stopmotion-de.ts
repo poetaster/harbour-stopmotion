@@ -184,10 +184,6 @@
         <source>Start canvas slideshow</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Start sView slideshow</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SlideshowViewPage</name>

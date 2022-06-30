@@ -5,7 +5,7 @@ import Nemo.Thumbnailer 1.0
 
 import "../components"
 import "../utils/localdb.js" as Database
-import "../utils/constants.js" as Constants
+//import "../utils/constants.js" as Constants
 import io.thp.pyotherside 1.5
 
 Page {

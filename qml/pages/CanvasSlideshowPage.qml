@@ -181,7 +181,8 @@ Page {
                 img = imageModel.get(i).url
                 if (i==0)
                     infoLoad.source = img
-                loadImage(img);
+                var insertImagePath = "image://paintImage/" + img
+                loadImage(insertImagePath);
             }
         }
     }
@@ -300,7 +301,7 @@ Page {
             }
         }
 
-        imageSource = imageModel.get(slideshowOrderArray[imageIndex]).url
+        imageSource = "image://paintImage/" + imageModel.get(slideshowOrderArray[imageIndex]).url
         imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
 
         var ctx = drawingCanvas.getContext('2d')
