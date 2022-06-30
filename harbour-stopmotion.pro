@@ -12,7 +12,15 @@
 # The name of your application
 TARGET = harbour-stopmotion
 
-CONFIG += sailfishapp_qml
+CONFIG += sailfishapp
+
+SOURCES += \
+        src/harbour-stopmotion.cpp \
+        src/nemoimagemetadata.cpp
+HEADERS += \
+        src/IconProvider.h \
+        src/ImageProvider.h \
+        src/nemoimagemetadata.h
 
 DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/Banner.qml \
