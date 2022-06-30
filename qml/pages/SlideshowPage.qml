@@ -10,7 +10,9 @@ import io.thp.pyotherside 1.5
 
 Page {
     id: slideshowDialog
-    QtObject {
+
+    QtObject
+    {
         id:slides
         property real cDOCK_PANEL_SIZE: 800
     }
