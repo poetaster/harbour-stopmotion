@@ -279,21 +279,25 @@ Page {
                     }
                 }
 
-                 ComboBox{
+                 ComboBox
+                 {
                     id: loopSwitch
                     width: parent.width * .33
-                    menu: ContextMenu {
+                    menu: ContextMenu
+                    {
                         MenuItem { text: "Loop off" ;
-                            onClicked: loop = false }
+                            onClicked: loop = 0 }
                         MenuItem { text: "Loop on" ;
-                            onClicked: loop = true }
+                            onClicked: loop = 1 }
 
                     }
-                    onCurrentIndexChanged: {
+                    onCurrentIndexChanged:
+                    {
                         console.log(currentIndex)
                         Database.setProp('loop',String(currentIndex))
                     }
-                    Component.onCompleted: {
+                    Component.onCompleted:
+                    {
                         loop = Database.getProp('loop')
                         loopSwitch.currentIndex = loop
                     }
@@ -361,7 +365,8 @@ Page {
             }
 */
 
-            CollapsingHeader {
+            CollapsingHeader
+            {
                 id: slideshowImagesCollapsingHeader
                 text: qsTrId("slideshow-images") + "(" + imageListModel.count + ")"
                 collapsingItem: imageGrid
@@ -369,7 +374,8 @@ Page {
                 interactive: imageListModel.count > 0
                 menuItems: [clearImages]
 
-                MenuItem {
+                MenuItem
+                {
                     id: clearImages
                     text: qsTrId("menu-clear")
                     onClicked: {
@@ -379,9 +385,9 @@ Page {
                 }
             }
 
-            SilicaGridView {
+            SilicaGridView
+            {
                 id: imageGrid
-
                 property Item expandedItem
 
                 width: parent.width
@@ -393,13 +399,15 @@ Page {
 
                 Behavior on height { SmoothedAnimation { duration: 300 } }
 
-                delegate: Item {
+                delegate: Item
+                {
                     id: dummy
                     width: slideshowDialog.imageWidth
                     height: thumbnail.isExpanded ? thumbnail.height + gridContextMenu.height : thumbnail.height
                     z: thumbnail.isExpanded ? 1000 : 1
 
-                    Thumbnail {
+                    Thumbnail
+                    {
                         id: thumbnail
 
                         property bool isExpanded: imageGrid.expandedItem == thumbnail
@@ -418,7 +426,8 @@ Page {
                             infoLoad.source = url
                         }
 
-                        MouseArea {
+                        MouseArea
+                        {
                             anchors.fill: parent
                             onPressAndHold: {
                                 imageGrid.expandedItem = thumbnail
@@ -432,7 +441,8 @@ Page {
                     }
                 }
                 /* we need this to obtain the orientation to pass to ffmpeg */
-                Image {
+                Image
+                {
                     id: infoLoad
                     visible: false
                     asynchronous: true
@@ -448,12 +458,14 @@ Page {
                     }
                 }
 
-                ContextMenu {
+                ContextMenu
+                {
                     id: gridContextMenu
 
                     property int index: -1
 
-                    MenuItem {
+                    MenuItem
+                    {
                         text: qsTr("Remove image")
                         onClicked: {
                             if (debug) console.log("Remove image from the slideshow...")
@@ -467,7 +479,8 @@ Page {
             }
         }
     }
-    Rectangle {
+    Rectangle
+    {
         id: progressDisplay
         visible: (finishedLoading === false)
         anchors.right: parent.right
@@ -492,9 +505,11 @@ Page {
         }
     }
 */
-    Component {
+    Component
+    {
         id: multiImagePickerDialog
-        MultiImagePickerDialog {
+        MultiImagePickerDialog
+        {
             onAccepted: {
                 var urls = []
                 var index = 0;
@@ -509,9 +524,11 @@ Page {
         }
     }
 
-    Component {
+    Component
+    {
         id: filesystemImagePickerDialog
-        MultiFilePickerDialog {
+        MultiFilePickerDialog
+        {
             nameFilters: imageFileFilters
             onAccepted: {
                 if (debug) console.log("File system image picker accepted...")
@@ -573,7 +590,8 @@ Page {
     // These are ALL the functions from clipper (Videoworks).
     Python {
         id: py
-        Component.onCompleted: {
+        Component.onCompleted:
+        {
             addImportPath(Qt.resolvedUrl('../py'));
             importModule('videox', function () {});
 
