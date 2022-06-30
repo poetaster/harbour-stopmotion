@@ -21,7 +21,7 @@ Page {
     property string imageSource: ""
     property string imageSource2: ""
     property int imageIndex: -1
-    property bool slideshowRunning:true
+    property bool slideshowRunning:false
     property ListModel imageModel
     property ListModel musicModel
     property var slideshowOrderArray: []
@@ -29,7 +29,7 @@ Page {
 
     // Settings.
     property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
-    property bool loop: true //Settings.getBooleanSetting(Constants.loopKey, true)
+    property int loop: 0 //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
@@ -184,6 +184,7 @@ Page {
                 var insertImagePath = "image://paintImage/" + img
                 loadImage(insertImagePath);
             }
+            slideshowRunning = true
         }
     }
 
@@ -286,9 +287,6 @@ Page {
     function nextPicture()
     {
         ++imageIndex
-
-        if((imageIndex) === imageModel.count)
-            imageIndex = 0
 
         //blanking.preventBlanking = true
         if (imageIndex == imageModel.count)
