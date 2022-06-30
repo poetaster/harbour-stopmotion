@@ -41,13 +41,17 @@ Page {
     // Notify about slideshow running status change.
     signal slideshowRunningToggled(bool runningStatus)
 
-    onOrientationChanged: {
+    onOrientationChanged:
+    {
 
-        if (orientation===Orientation.Landscape){
-        } else if (orientation === Orientation.Portrait){
+        if (orientation===Orientation.Landscape)
+        {
+        } else if (orientation === Orientation.Portrait)
+        {
         }
     }
-    onSlideshowRunningChanged: {
+    onSlideshowRunningChanged:
+    {
         if (debug) console.log("SlideshowRunning status changed: " + slideshowRunning)
         if (slideshowRunning) {
             //backgroundMusic.play()
@@ -60,7 +64,8 @@ Page {
 
 
     // React on status changes.
-    onStatusChanged: {
+    onStatusChanged:
+    {
         if(status === PageStatus.Activating)
         {
             if (debug) console.log("Page activating...")
@@ -124,12 +129,14 @@ Page {
         }
     }
 
-    Component.onDestruction: {
+    Component.onDestruction:
+    {
         if (debug) console.log("PlaySlideshowPage destroyed...")
         blanking.preventBlanking = false
     }
 
-    DisplayBlanking {
+    DisplayBlanking
+    {
         id: blanking
     }
 
@@ -143,25 +150,28 @@ Page {
         }
     }*/
 
-    PageHeader {
+    PageHeader
+    {
         id: header
         title: ""
         visible: !slideshowRunning
     }
 
-    Rectangle {
+    Rectangle
+    {
         id: background
         anchors.fill: parent
         color: Theme.colorScheme == Theme.LightOnDark ? "black" : "white"
     }
 
     // Image.
-    Image {
+    Image
+    {
         id: slideshowPicture
         anchors.fill: parent
         asynchronous: true
-        autoTransform: false
-        cache: false
+        autoTransform: true
+        cache: true
         clip: true
         fillMode: Image.PreserveAspectFit
         sourceSize.width: playSlideshowPage.width
@@ -173,7 +183,8 @@ Page {
         opacity: visible ? 1.0 : 0.0
         //Behavior on opacity { FadeAnimation { duration: 1000 } }
 
-        onStatusChanged: {
+        onStatusChanged:
+        {
             if(status == Image.Ready && !firstLoaded)
             {
                 if (debug) console.log("Image ready, start timer...")
@@ -183,7 +194,8 @@ Page {
             }
         }
 
-        Label {
+        Label
+        {
             id: infoLabel
             anchors.centerIn: parent
             width: parent.width - Theme.horizontalPageMargin*2
@@ -194,12 +206,13 @@ Page {
     }
 
     // Secondimage.
-    Image {
+    Image
+    {
         id: slideshowPicture2
         anchors.fill: parent
         asynchronous: true
-        autoTransform: false
-        cache: false
+        autoTransform: true
+        cache: true
         clip: true
         fillMode: Image.PreserveAspectFit
         sourceSize.width: playSlideshowPage.width
@@ -211,7 +224,8 @@ Page {
         opacity: visible ? 1.0 : 0.0
         //Behavior on opacity { FadeAnimation { duration: 1000 } }
 
-        Label {
+        Label
+        {
             id: infoLabel2
             anchors.centerIn: parent
             width: parent.width - Theme.horizontalPageMargin*2
@@ -224,28 +238,35 @@ Page {
     /*
       Pause indicators.
       */
-    IconButton {
+    IconButton
+    {
         id: recordButton
         icon.source: Qt.resolvedUrl("../img/play-button.png")
         scale: 0.75
         visible: !slideshowRunning
-        anchors {
+        anchors
+        {
             bottom: parent.bottom
             right: parent.right
             margins: 50
             //horizontalCenter: parent.horizontalCenter
         }
-        onClicked: {
+        onClicked:
+        {
             toggleSlideshow()
         }
-        states:[
-            State {
+        states:
+            [
+            State
+            {
                 name:"Horizontal"
                 when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
 
-                AnchorChanges {
+                AnchorChanges
+                {
                     target: recordButton
-                    anchors {
+                    anchors
+                    {
                         bottom: undefined
                         right: parent.right
                         horizontalCenter:undefined
@@ -253,18 +274,18 @@ Page {
                     }
                 }
             }
-
-
-        ]
+            ]
 
     }
 
     // -------------------------------------------
 
     // Handle start/stop by click.
-    MouseArea {
+    MouseArea
+    {
         id: slideshowToggleArea
-        anchors {
+        anchors
+        {
 //            left: previousImageArea.right
             left: parent.left
             top: parent.top
@@ -273,64 +294,72 @@ Page {
         }
 
         // Toggle slideshow start/stop.
-        onClicked: {
+        onClicked:
+        {
             if(debug) console.log("onClicked...")
             toggleSlideshow()
         }
     }
 
-    MouseArea {
+    MouseArea
+    {
         id: nextImageArea
-        anchors {
+        anchors
+        {
             right: parent.right
             top: parent.top
             bottom: parent.bottom
         }
         width: parent.width / 5
 
-        onClicked: {
+        onClicked:
+        {
             if (debug) console.log("Move to next image...")
 
             // If slideshow is running then restart timer on picture change.
-            if (slideshowRunning) {
+            if (slideshowRunning)
+            {
                 slideshowTimer.restart()
             }
 
             nextPicture()
         }
     }
-
     // Timer to trigger image change.
-    Timer {
+    Timer
+    {
         id: slideshowTimer
         interval: slideshowInterval
         repeat: true
         running: slideshowRunning
 
         // Change image when timer triggers.
-        onTriggered: {
+        onTriggered:
+        {
             if (debug) console.log("Change picture...")
             nextPicture()
         }
     }
 
-
     /*
       Functions.
       */
 
-    function toggleSlideshow() {
+    function toggleSlideshow()
+    {
         slideshowRunning = !slideshowRunning
         blanking.preventBlanking = slideshowRunning
     }
 
-    function nextPicture() {
+    function nextPicture()
+    {
         if (debug) console.log("nextPicture()")
         ++imageIndex
 
         blanking.preventBlanking = true
 
-        if (imageIndex == imageModel.count) {
+        if (imageIndex == imageModel.count)
+        {
             imageIndex = 0;
             if (!loop) {
                 slideshowRunning = false;
@@ -338,11 +367,12 @@ Page {
                 return;
             }
         }
-
-//        imageChanged(imageModel.get(imageIndex).url)
-        imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
+        // This is for cover which we don't use.
+        //imageChanged(imageModel.get(imageIndex).url)
+        //imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
 
         // Set picture visibilities.
+
 
         if(slideshowPicture.visible)
         {
@@ -366,9 +396,5 @@ Page {
             else
                 imageSource2 = imageModel.get(slideshowOrderArray[imageIndex + 1]).url
         }
-
     }
-
-
-
 }

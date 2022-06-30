@@ -199,6 +199,17 @@ Page {
                     pageStack.push(Qt.resolvedUrl("CanvasSlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                 }
             }
+            /*
+            MenuItem {
+                id: menuSlideviewStartSlideshow
+                text: qsTr("Start sView slideshow")
+                enabled: imageListModel.count > 0
+                onClicked: {
+                    if (debug) console.log("Start slideshow...")
+                    pageStack.push(Qt.resolvedUrl("SlideshowViewPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
+                }
+            }
+            */
 
         }
 
