@@ -33,7 +33,7 @@ Page {
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
-    property bool debug: true
+    property bool debug: false
     property var portrait
     property int dx: 0
     property int dy: 0

@@ -35,7 +35,7 @@ Page {
 
     property Item remorse
 
-    property bool debug: true
+    property bool debug: false
 
     // python / export specific vars
 
