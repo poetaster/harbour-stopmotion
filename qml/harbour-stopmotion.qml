@@ -10,11 +10,14 @@ ApplicationWindow
 {
     property bool debug:false
 
-    initialPage: Component {
+    initialPage: Component
+    {
         id : sscr
-        ShootScreen {
+        ShootScreen
+        {
             id:shootScr
-            Component.onCompleted: {
+            Component.onCompleted:
+            {
                 videoOutput.source=oCamera;
             }
         }
@@ -25,36 +28,40 @@ ApplicationWindow
     _defaultPageOrientations: Orientation.All
 
     // not using yet, but might add
-    Connections {
+    Connections
+    {
         id: mainWinConnections
         target: null
         ignoreUnknownSignals: true
-        onImageChanged: {
+        onImageChanged:
+        {
             if (debug) console.log("Image changed, current image:", url)
             //coverPage.setImage(url)
         }
-        onSlideshowRunningToggled: {
+        onSlideshowRunningToggled:
+        {
             if (debug) console.log("Slideshow running:", runningStatus)
             //coverPage.toggleSlideshowRunning(runningStatus)
         }
     }
 
-    QtObject {
+    QtObject
+    {
         id: cameraState
         signal slidesShow(bool slideshowRunning)
     }
 
-    Connections {
+    Connections
+    {
         target: cameraState
-        onSlidesShow: {
+        onSlidesShow:
+        {
             if (debug) console.log("cameraState:", slideshowRunning)
             videoOutput.visible = !slideshowRunning
         }
     }
-
-
-
-    VideoOutput {
+    VideoOutput
+    {
         id:videoOutput
         anchors.fill: parent
         z : -1

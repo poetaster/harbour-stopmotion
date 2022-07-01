@@ -282,9 +282,9 @@ Page {
                     width: parent.width * .33
                     menu: ContextMenu {
                         MenuItem { text: "Loop off" ;
-                            onClicked: loop = false }
+                            onClicked: loop = 0 }
                         MenuItem { text: "Loop on" ;
-                            onClicked: loop = true }
+                            onClicked: loop = 1 }
 
                     }
                     onCurrentIndexChanged: {

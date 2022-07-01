@@ -185,7 +185,15 @@ Page {
                 loadImage(insertImagePath);
             }
             slideshowRunning = true
+            busyIndicator.running = false
         }
+    }
+
+    BusyIndicator {
+        id:busyIndicator
+        size: BusyIndicatorSize.Large
+        anchors.centerIn: parent
+        running: true
     }
 
     /*
