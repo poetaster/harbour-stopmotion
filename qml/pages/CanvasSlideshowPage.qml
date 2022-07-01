@@ -175,6 +175,7 @@ Page {
 
         Component.onCompleted:  {
             // preload images.
+            busyIndicator.running = true
             var img = ""
             for (var i=0;i<imageModel.count; i++)
             {
@@ -186,19 +187,20 @@ Page {
             }
             slideshowRunning = true
             busyIndicator.running = false
+
         }
     }
-
-    BusyIndicator {
+    BusyIndicator
+    {
         id:busyIndicator
         size: BusyIndicatorSize.Large
-        anchors.centerIn: parent
-        running: true
+        anchors {
+            bottom: parent.bottom
+            right: parent.left
+        }
+        running: false
     }
-
-    /*
-      Pause indicators.
-      */
+    /* Pause indicators. */
     IconButton
     {
         id: recordButton

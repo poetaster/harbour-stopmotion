@@ -29,7 +29,7 @@ Page {
 
     // Settings.
     property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
-    property bool loop: 0 //Settings.getBooleanSetting(Constants.loopKey, true)
+    property int loop: 0 //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
