@@ -103,6 +103,9 @@ Page {
             onRejected: savePath = StandardPaths.pictures
         }
     }
+    Dialog {
+
+    }
 
     PropertyAnimation { id: closeDockAnimation;
         target: panel;
@@ -359,6 +362,10 @@ Page {
 
             }
             onCurrentIndexChanged: Database.setProp('delay',String(currentIndex))
+
+            Component.onCompleted: {
+                currentIndex =  Database.getProp('delay')
+            }
         }
         ComboBox {
             id:  pathSelector
@@ -444,7 +451,12 @@ Page {
                     onClicked: camera.flash.mode = Camera.FlashSlowSyncFrontCurtain}
 
             }
+
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
+
+            Component.onCompleted: {
+                currentIndex = Database.getProp('flash_type')
+            }
         }
 
         ComboBox {
@@ -469,6 +481,12 @@ Page {
                 }
             }
             onCurrentIndexChanged: Database.setProp('deviceId',String(currentIndex));
+            Component.onCompleted: {
+                currentIndex = Database.getProp('deviceID')
+            }
+        }
+        Dialog {
+
         }
 
         Button {
