@@ -160,6 +160,15 @@ Page {
             }
         }
     }
+    BusyIndicator
+    {
+        id:busyIndicator
+        size: BusyIndicatorSize.Large
+        anchors {
+            centerIn: parent
+        }
+        running: true
+    }
     Canvas
     {
         id: drawingCanvas
@@ -172,6 +181,10 @@ Page {
         height:1920
 
         renderTarget: Canvas.Image
+        onImageLoaded: {
+            slideshowRunning = true
+            busyIndicator.running = false
+        }
 
         Component.onCompleted:  {
             // preload images.
@@ -185,21 +198,9 @@ Page {
                 var insertImagePath = "image://paintImage/" + img
                 loadImage(insertImagePath);
             }
-            slideshowRunning = true
-            busyIndicator.running = false
+        }
+    }
 
-        }
-    }
-    BusyIndicator
-    {
-        id:busyIndicator
-        size: BusyIndicatorSize.Large
-        anchors {
-            bottom: parent.bottom
-            right: parent.left
-        }
-        running: false
-    }
     /* Pause indicators. */
     IconButton
     {
