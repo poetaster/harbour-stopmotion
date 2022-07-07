@@ -81,6 +81,8 @@ public:
         if (!ir.canRead())
             return img;
 
+        ir.setAutoTransform(true);
+
         originalSize = ir.size();
         format = ir.format();
 
@@ -89,16 +91,17 @@ public:
 
         img = ir.read();
 
-        qDebug() << Q_FUNC_INFO << "image format:" << format;
+        //qDebug() << Q_FUNC_INFO << "image format:" << format;
 
         // @attah's concise solution to r<->b channel swap issues
+        // isn't strictly speaking need with the scenegraph addition, but you know.
         img = img.convertToFormat(QImage::Format_RGB888);
 
         //img.convertToFormat()
-        NemoImageMetadata meta(filename, format);
+        //NemoImageMetadata meta(filename, format);
 
-        if (meta.orientation() != NemoImageMetadata::TopLeft)
-            img = rotate(img, meta.orientation());
+        //if (meta.orientation() != NemoImageMetadata::TopLeft)
+        //    img = rotate(img, meta.orientation());
         if (requestedSize.isValid())
             return img.scaled(requestedSize.width(), requestedSize.height(), Qt::KeepAspectRatio);
         else
