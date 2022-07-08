@@ -21,7 +21,8 @@ Page {
 
     property bool debug: false
 
-    QtObject {
+    QtObject
+    {
         id:d
         property real cDOCK_PANEL_SIZE: 800
     }
@@ -29,14 +30,16 @@ Page {
     property var slideshowPage
 
     // function to pad image/series names with leading 0s
-    function pad(n, width) {
+    function pad(n, width)
+    {
         n = n + '';
         return n.length >= width ? n :
                                    new Array(width - n.length + 1).join('0') + n;
     }
 
 
-    onStatusChanged: {
+    onStatusChanged:
+    {
         if(status === PageStatus.Active)
         {
             // not quite! but sometimes
@@ -45,21 +48,6 @@ Page {
          } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
          {
          }
-    }
-
-    Camera {
-        id: camera
-        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
-        exposure {
-            exposureMode: Camera.ExposureAuto
-        }
-        captureMode: Camera.CaptureStillImage
-        flash.mode: Camera.FlashOff
-        focus.focusMode: Camera.FocusContinuous
-        imageCapture {
-            resolution: "1920x1080"
-        }
-
     }
 
     onOrientationChanged: {
@@ -82,10 +70,25 @@ Page {
         }
     }
 
+    Camera
+    {
+        id: camera
+        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
+        exposure {
+            exposureMode: Camera.ExposureAuto
+        }
+        captureMode: Camera.CaptureStillImage
+        flash.mode: Camera.FlashOff
+        focus.focusMode: Camera.FocusContinuous
+        imageCapture {
+            resolution: "1920x1080"
+        }
 
-    Component {
+    }
+
+    Component
+    {
         id: internalPicker
-        
         FolderPickerDialog {
             id: folderiDialog
             title: "Save to:"
@@ -93,7 +96,9 @@ Page {
             onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         }
     }
-    Component {
+
+    Component
+    {
         id: externalPicker
         FolderPickerDialog {
             id: foldereDialog
@@ -103,17 +108,17 @@ Page {
             onRejected: savePath = StandardPaths.pictures
         }
     }
-    Dialog {
 
-    }
-
-    PropertyAnimation { id: closeDockAnimation;
+    PropertyAnimation
+    {
+        id: closeDockAnimation;
         target: panel;
         property: "x";
         to: -panel.width;
         duration: 300
     }
-    PropertyAnimation {
+    PropertyAnimation
+    {
         id: openDockAnimation;
         target: panel;
         property: "x";
@@ -121,7 +126,8 @@ Page {
         duration: 300
     }
 
-    MouseArea {
+    MouseArea
+    {
         id : mA
         anchors.fill: parent
         property real downX : 0
@@ -284,7 +290,8 @@ Page {
         ]
     }
 
-    Rectangle {
+    Rectangle
+    {
         id: panel
         height: parent.height
         anchors {
@@ -293,7 +300,8 @@ Page {
         }
         width: d.cDOCK_PANEL_SIZE<(parent.width*0.8)?d.cDOCK_PANEL_SIZE:(parent.width*0.8);
         x: 0
-        opacity: Theme.highlightBackgroundOpacity
+        opacity: Theme.opacityOverlay
+        //opacity: Theme.highlightBackgroundOpacity
         color: Theme.highlightBackgroundColor
         MouseArea {
             id :dockMA
@@ -337,11 +345,13 @@ Page {
             //            Drag.active:
         }
     }
+
     Column {
         id:leftPanelCol
         anchors.fill: panel
         //            visible: false
-        ComboBox {
+        ComboBox
+        {
             id:delaySelector
             anchors {
                 left: parent.left
@@ -367,7 +377,8 @@ Page {
                 currentIndex =  Database.getProp('delay')
             }
         }
-        ComboBox {
+        ComboBox
+        {
             id:  pathSelector
             anchors {
                 left: parent.left
@@ -398,7 +409,8 @@ Page {
 
             onCurrentIndexChanged: Database.setProp('path_type',String(currentIndex));
         }
-        TextField {
+        TextField
+        {
             id:selectPath
             anchors {
                 left: parent.left
@@ -414,7 +426,8 @@ Page {
                 Database.setProp('path',text);
             }
         }
-        TextField {
+        TextField
+        {
             id:sName
             anchors {
                 left: parent.left
@@ -430,7 +443,8 @@ Page {
                 //Database.setProp('path',text);
             }
         }
-        ComboBox {
+        ComboBox
+        {
             id:flashModeSelector
             anchors {
                 left: parent.left
@@ -459,7 +473,8 @@ Page {
             }
         }
 
-        ComboBox {
+        ComboBox
+        {
             id:cameraSelector
             label: qsTr("Select Camera")
             anchors {
@@ -485,10 +500,6 @@ Page {
                 currentIndex = Database.getProp('deviceID')
             }
         }
-        Dialog {
-
-        }
-
         Button {
             id: slideshowShowSlideshow
             anchors {
@@ -577,13 +588,15 @@ Page {
 
 
     // simple click on Timer start
-    SoundEffect {
+    SoundEffect
+    {
         id: playClick
         source: Qt.resolvedUrl("../sound/click.wav")
     }
 
     // drives the repeated capture of images
-    Timer {
+    Timer
+    {
         id: pStopmotion
         interval: 1000;
         running: false
@@ -655,11 +668,13 @@ Page {
     }
 
     states: [
-        State {
+        State
+        {
             name:"active"
             when : Qt.application.state === Qt.ApplicationActive || sView.state=== "Recording"
         },
-        State {
+        State
+        {
             name:"deactivated"
             when : Qt.application.state === Qt.ApplicationInactive &&  mA.state === "Ready"
         }

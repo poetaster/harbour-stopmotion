@@ -68,6 +68,49 @@
     </message>
 </context>
 <context>
+    <name>PythonHandler</name>
+    <message>
+        <source>Audio extracted to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This seems to be a large file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For speed convenience you may scale it down first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ERROR!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exported to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Extracted to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use &apos;delete&apos; in file menu.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>WARNING!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Large output resolution detected:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please reduce to max 1920x1920 pixels.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ShootScreen</name>
     <message>
         <source>Slideshow</source>
@@ -134,50 +177,6 @@
     </message>
     <message>
         <source>Remove image</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Audio extracted to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>This seems to be a large file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>For speed convenience you may scale it down first.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>ERROR!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exported to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Extracted to</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use &apos;delete&apos; in file menu.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>WARNING!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Large output resolution detected:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please reduce to max 1920x1920 pixels.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pthon Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

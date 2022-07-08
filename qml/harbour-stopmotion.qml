@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import Sailfish.Silica 1.0
 import QtMultimedia 5.0
+import "components"
 import "pages"
 
 // Icon
@@ -10,6 +11,9 @@ ApplicationWindow
 {
     property bool debug:false
 
+    Banner {
+        id: banner
+    }
     initialPage: Component
     {
         id : sscr
@@ -44,6 +48,11 @@ ApplicationWindow
             //coverPage.toggleSlideshowRunning(runningStatus)
         }
     }
+
+    PythonHandler {
+      id: py
+    }
+
 
     QtObject
     {
