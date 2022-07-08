@@ -300,8 +300,7 @@ Page {
         }
         width: d.cDOCK_PANEL_SIZE<(parent.width*0.8)?d.cDOCK_PANEL_SIZE:(parent.width*0.8);
         x: 0
-        opacity: Theme.opacityOverlay
-        //opacity: Theme.highlightBackgroundOpacity
+        opacity: Theme.highlightBackgroundOpacity
         color: Theme.highlightBackgroundColor
         MouseArea {
             id :dockMA

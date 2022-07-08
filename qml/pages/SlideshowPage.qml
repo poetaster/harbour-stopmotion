@@ -5,7 +5,6 @@ import Nemo.Thumbnailer 1.0
 
 import "../components"
 import "../utils/localdb.js" as Database
-//import "../utils/constants.js" as Constants
 
 Page
 {
@@ -28,11 +27,7 @@ Page
     property string slideshowName: ""
     property int imageWidth: Math.floor(slideshowDialog.width / 5)
     property var slideshow
-
     property var playSlideshowPage
-
-    // NOTE: used to translate context menu items.
-    property bool translationToggle: false
 
     property Item remorse
 
@@ -41,12 +36,11 @@ Page
     // python / export specific vars
 
     property string tempMediaFolderPath: StandardPaths.home + '/.cache/de.poetaster/stopmotion'
-    property string tempMediaType : "mkv"
-    property string ffmpeg_staticPath : "/usr/bin/ffmpeg"
     property string outputPathPy
     property string homeDirectory: StandardPaths.home
+
     //property string inputPathPy : decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") )
-    //property string saveMediaFolderPath : StandardPaths.home + '/Videos'
+
     property bool finishedLoading: true
     property int processedPercent: 0
     property int undoNr: 0
@@ -136,6 +130,7 @@ Page
         anchors.fill: parent
 
         PullDownMenu {
+
             /*            MenuItem {
                 id: menuSettings
                 text: qsTrId("menu-settings")
@@ -573,38 +568,4 @@ Page
         }
     }
 
-    function checkThemechangeAdjustMarkerPadding() {
-        // Patch: sliderwidth makes a different
-        if ((Theme.primaryColor).toString() === "#ffffff" ) { // -> white font on dark themes, slider is wider as of SF 3.4
-            addThemeSliderPaddingSides = 0
-        }
-        else { // "#000000" -> black font on light themes, slider is smaller as of SF 3.4
-            addThemeSliderPaddingSides = Theme.paddingMedium
-        }
-    }
-
-    function preparePathAndUndo() {
-        idMediaPlayer.stop()
-        finishedLoading = false
-        undoNr = undoNr + 1
-        outputPathPy = tempMediaFolderPath + "video" + ".tmp" + undoNr + "." + tempMediaType
-        console.debug("pyPath: "+ outputPathPy)
-    }
-
-    function undoBackwards() {
-        idMediaPlayer.stop()
-        finishedLoading = false
-        brandNewFile = false // Patch: size warning banner will not show again when going backwards to original image
-        undoNr = undoNr - 1
-        lastTmpMedia2delete = decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") )
-        if (undoNr <= 0) {
-            undoNr = 0
-            idMediaPlayer.source = encodeURI(origMediaFilePath)
-        }
-        else {
-            idMediaPlayer.source = idMediaPlayer.source.toString().replace(".tmp"+(undoNr+1), ".tmp"+(undoNr))
-        }
-        py.deleteLastTMPFunction()
-        py.getVideoInfo(decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") ), "false" )
-    }
 }
