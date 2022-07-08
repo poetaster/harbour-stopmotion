@@ -9,7 +9,7 @@ Python
 {
 
     id: py
-
+    // MUCH of this is cribbed from Videoworks. Much of that will not work here. It's largely for reference.
     property bool debug: true
     property string tempMediaFolderPath: StandardPaths.home + '/.cache/de.poetaster/stopmotion'
     property string tempMediaType : "mkv"

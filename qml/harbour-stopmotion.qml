@@ -10,7 +10,7 @@ import "pages"
 ApplicationWindow
 {
     property bool debug:false
-
+    // global banner used for feedback, for instance from ffmpeg python file save.
     Banner {
         id: banner
     }

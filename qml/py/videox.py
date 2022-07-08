@@ -609,6 +609,7 @@ def imageFrei0rFunction ( ffmpeg_staticPath, inputPathPy, outputPathPy, applyEff
 
 
 
+
 # COLLAGE FUNCTIONS
 # ########################################################################################################################
 
@@ -892,6 +893,7 @@ def extractImagesFunction ( ffmpeg_staticPath, inputPathPy, modeExtractImg, thum
             pyotherside.send('progressPercentage', progress)
     if "true" in success :
         pyotherside.send('imagesExtracted', )
+
 
 
 
