@@ -3,16 +3,17 @@ Name:       harbour-stopmotion
 # >> macros
 # << macros
 
-Summary:    Stopmotion takes time lapse photos to make stopmotion animations
-Version:    0.4.0
-Release:    1
-Group:      Qt/Qt
-License:    GPLv3
-URL:        http://github.com/poetaster/harbour-stopmotion
-Source0:    %{name}-%{version}.tar.bz2
-Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:    ffmpeg
-Requires:    ffmpeg-tools
+Summary:       Stopmotion takes time lapse photos to make stopmotion animations
+Version:       0.4.1
+Release:       1
+Group:         Qt/Qt
+License:       GPLv3
+URL:           http://github.com/poetaster/harbour-stopmotion
+Source0:       %{name}-%{version}.tar.bz2
+Requires:      sailfishsilica-qt5 >= 0.10.9
+Requires:       ffmpeg
+Requires:       ffmpeg-tools
+Requires:       pyotherside-qml-plugin-python3-qt5
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.3
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
