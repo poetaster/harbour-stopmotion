@@ -30,6 +30,12 @@ Python
         addImportPath(Qt.resolvedUrl('../py'));
         importModule('videox', function () {});
 
+        setHandler('createSaveFolder', function() {
+            py.createSaveFolder()
+        });
+
+        createSaveFolder()
+
         // Handlers do something to QML with received infos from Pythonfile (=pyotherside.send)
         setHandler('homePathFolder', function( homeDir ) {
             tempMediaFolderPath = homeDir + "/.cache/de.poetaster/stopmotion/"
@@ -190,6 +196,9 @@ Python
     // file operations
     function getHomePath() {
         call("videox.getHomePath", [])
+    }
+    function createSaveFolder() {
+        call("videox.createSaveFolder", [])
     }
     function createTmpAndSaveFolder() {
         call("videox.createTmpAndSaveFolder", [ tempMediaFolderPath, saveMediaFolderPath ])

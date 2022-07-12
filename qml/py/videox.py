@@ -24,6 +24,12 @@ def getHomePath ():
     homeDir = str(Path.home())
     pyotherside.send('homePathFolder', homeDir )
 
+def createSaveFolder ():
+    savePath = str(Path.home()) + "/Pictures/Stopmotion"
+    if not os.path.exists( savePath ):
+        os.makedirs( savePath )
+        pyotherside.send('folderExistence', )
+
 def createTmpAndSaveFolder ( tempMediaFolderPath, saveAudioFolderPath ):
     if not os.path.exists( "/"+tempMediaFolderPath ):
         os.makedirs( "/"+tempMediaFolderPath )
