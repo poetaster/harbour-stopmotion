@@ -481,11 +481,13 @@ Page {
                 right:parent.right
             }
             menu: ContextMenu {
-                MenuItem {
+                MenuItem
+                {
                     text: qsTr("One")
                     onClicked: camera.deviceId = 0
                 }
-                MenuItem {
+                MenuItem
+                {
                     text: qsTr("Two")
                     onClicked: {
                         camera.deviceId = 1
@@ -499,7 +501,8 @@ Page {
                 currentIndex = Database.getProp('deviceID')
             }
         }
-        Button {
+        Button
+        {
             id: slideshowShowSlideshow
             anchors {
                 left: parent.left
@@ -507,7 +510,6 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
-                //camera.setCameraState()
                 camera.unlock()
                 cameraState.slidesShow(true)
                 slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true }))
