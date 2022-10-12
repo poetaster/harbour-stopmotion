@@ -3,9 +3,9 @@ Name:       harbour-stopmotion
 # >> macros
 # << macros
 
-Summary:       Stopmotion animation app.
-Version:       0.4.2
-Release:       1
+Summary:       Stopmotion animation app
+Version:       0.4.3
+Release:       2
 Group:         Qt/Qt
 License:       GPLv3
 URL:           http://github.com/poetaster/harbour-stopmotion
@@ -75,7 +75,7 @@ desktop-file-install --delete-original       \
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}
+%{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png

@@ -244,6 +244,8 @@ Page
                 }
                 Component.onCompleted: {
                     value = Database.getProp('saveFps')
+                    if (value < 1 )
+                        value = 5
                     saveFps = value
                 }
             }
