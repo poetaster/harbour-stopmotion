@@ -4,8 +4,8 @@ Name:       harbour-stopmotion
 # << macros
 
 Summary:    Stopmotion takes time lapse photos to make stopmotion animations
-Version:    0.2.0
-Release:    1
+Version:    0.2.1
+Release:    2
 Group:      Qt/Qt
 License:    GPLv3
 BuildArch:  noarch
