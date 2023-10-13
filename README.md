@@ -7,9 +7,7 @@ Parts of the Recording screen are based on a qml app that was once available for
 A number of elements from the Slideshow views originate with Joni Korhonen Slideshow for SFOF:
 https://github.com/pinniini/harbour-slideshow
 
-![Screen2](screenshot-01.png)
-![Screen1](screenshot-02.png)
-![Screen1](screenshot-03.png)
+![Screen2](cover.png)
 This is beta quality software, but works suprisingly well. Planned are c++ backends to control other cameras,
 more camera control more animation options.
 

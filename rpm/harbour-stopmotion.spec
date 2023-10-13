@@ -1,6 +1,7 @@
 Name:       harbour-stopmotion
 
 # >> macros
+%define _binary_payload w2.xzdio
 # << macros
 
 Summary:    Stopmotion takes time lapse photos to make stopmotion animations
