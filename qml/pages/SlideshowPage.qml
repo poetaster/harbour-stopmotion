@@ -2,17 +2,18 @@ import QtQuick 2.5
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Nemo.Thumbnailer 1.0
+import Qt.labs.folderlistmodel 2.1
 
 import "../components"
 import "../utils/localdb.js" as Database
-import "../utils/constants.js" as Constants
-import io.thp.pyotherside 1.5
 
-Page {
+Page
+{
     id: slideshowDialog
 
-    QtObject
-    {
+
+    QtObject {
+
         id:slides
         property real cDOCK_PANEL_SIZE: 800
     }
@@ -29,25 +30,20 @@ Page {
     property string slideshowName: ""
     property int imageWidth: Math.floor(slideshowDialog.width / 5)
     property var slideshow
-
     property var playSlideshowPage
-
-    // NOTE: used to translate context menu items.
-    property bool translationToggle: false
 
     property Item remorse
 
-    property bool debug: true
+    property bool debug: false
 
     // python / export specific vars
 
     property string tempMediaFolderPath: StandardPaths.home + '/.cache/de.poetaster/stopmotion'
-    property string tempMediaType : "mkv"
-    property string ffmpeg_staticPath : "/usr/bin/ffmpeg"
     property string outputPathPy
     property string homeDirectory: StandardPaths.home
+
     //property string inputPathPy : decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") )
-    //property string saveMediaFolderPath : StandardPaths.home + '/Videos'
+
     property bool finishedLoading: true
     property int processedPercent: 0
     property int undoNr: 0
@@ -56,14 +52,43 @@ Page {
     property int fpsMode: 0
     property int loop: 1
 
+    function addLastSeries(){
+        //const p = Database.getProp('path')
+        //const s = seriesName
+        if(debug) console.log(seriesName)
+        if(debug) console.log(Database.getProp('path'))
+
+        seriesModel.folder = Database.getProp('path')
+        seriesModel.nameFilters =[seriesName + "*.jpg"]
+
+        if(debug) console.log(seriesModel.count)
+        if(debug) console.log(seriesModel.folder)
+
+        imageListModel.clear()
+
+        for (var i = 0; i < seriesModel.count; ++i) {
+            var url = seriesModel.get(i, "fileURL")
+            if (debug) console.log(url)
+            var fileName = seriesModel.get(i, "fileName")
+            // Handle selection
+            imageListModel.append({'fileName': fileName, 'url': Qt.resolvedUrl(url)})
+        }
+
+    }
+
+
+    FolderListModel {
+        id: seriesModel
+        nameFilters: [seriesName + "*.jpg"]
+        folder: Database.getProp('path')
+    }
+
     onStatusChanged: {
-        if(status === PageStatus.Activating)
-        {
+        if(status === PageStatus.Activating) {
             // Connection to Video display from window page
             cameraState.slidesShow(true)
-
-        } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
-        {
+        } else if(status === PageStatus.Deactivating) {
+            // Deactivating, set defaults.
         }
     }
 
@@ -121,10 +146,6 @@ Page {
 
 */
 
-    Banner {
-        id: banner
-    }
-
     /*
     ListModel {
         id: backgroundMusicModel
@@ -141,6 +162,7 @@ Page {
         anchors.fill: parent
 
         PullDownMenu {
+
             /*            MenuItem {
                 id: menuSettings
                 text: qsTrId("menu-settings")
@@ -173,6 +195,11 @@ Page {
                 }
             }
             MenuItem {
+                id: seriesPictures
+                text: qsTr("Add last series")
+                onClicked: addLastSeries()
+            }
+            MenuItem {
                 id: menuPictures
                 text: qsTr("Add files")
                 onClicked: pageStack.push(multiImagePickerDialog)
@@ -186,8 +213,6 @@ Page {
                 text: qsTr("Start slideshow")
                 enabled: imageListModel.count > 0
                 onClicked: {
-                    if (debug) console.log("Start slideshow...")
-                    //playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'musicModel': backgroundMusicModel, 'slideshowOrderArray': getSlideshowOrder()})
                     playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                     mainWinConnections.target = playSlideshowPage
                 }
@@ -197,21 +222,9 @@ Page {
                 text: qsTr("Start canvas slideshow")
                 enabled: imageListModel.count > 0
                 onClicked: {
-                    if (debug) console.log("Start slideshow...")
                     pageStack.push(Qt.resolvedUrl("CanvasSlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                 }
             }
-            /*
-            MenuItem {
-                id: menuSlideviewStartSlideshow
-                text: qsTr("Start sView slideshow")
-                enabled: imageListModel.count > 0
-                onClicked: {
-                    if (debug) console.log("Start slideshow...")
-                    pageStack.push(Qt.resolvedUrl("SlideshowViewPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
-                }
-            }
-            */
 
         }
 
@@ -235,7 +248,7 @@ Page {
                 }
                 Keys.onReturnPressed: {
                     focus = false
-                    py.createFilmstripFunction()
+                    py.createFilmstripFunction(text,imageListModel,saveFps,fpsMode)
                 }
                 width: parent.width - Theme.paddingMedium
             }
@@ -254,6 +267,8 @@ Page {
                 }
                 Component.onCompleted: {
                     value = Database.getProp('saveFps')
+                    if (value < 1 )
+                        value = 5
                     saveFps = value
                 }
             }
@@ -505,6 +520,9 @@ Page {
         }
     }
 */
+
+    // File pickers
+
     Component
     {
         id: multiImagePickerDialog
@@ -554,26 +572,6 @@ Page {
                 folderLoader.readFilesInFolder(selectedPath)
             }
         }
-    }
-*/
-    /*
-    function translateUi() {
-        menuSettings.text = qsTrId("menu-settings")
-        menuMusic.text = qsTrId("menu-add-music")
-        menuFolderPictures.text = qsTrId("quick-folderpicker-title")
-        menuFilesystemPictures.text = qsTrId("menu-add-files-filesystem")
-        menuPictures.text = qsTrId("menu-add-files")
-        menuStartSlideshow.text = qsTrId("menu-start-slideshow")
-        slideshowNameField.label = qsTrId("slideshow-name-label")
-        slideshowNameField.placeholderText = qsTrId("slideshow-name-placeholder")
-
-        // Use Qt.binding to maintain translation binding with item count changes.
-        slideshowImagesCollapsingHeader.text = Qt.binding(function() {return qsTrId("slideshow-images") + "(" + imageListModel.count + ")"})
-        clearImages.text = qsTrId("menu-clear")
-
-        // Use Qt.binding to maintain translation binding with item count changes.
-        slideshowBackgroundMusicCollapsingHeader.text = Qt.binding(function() {return qsTrId("slideshow-background-music") + "(" + backgroundMusicModel.count + ")"})
-        clearMusic.text = qsTrId("menu-clear")
     }
 */
 
@@ -1434,6 +1432,7 @@ Page {
         }
     } // end python
 
+
     // *********************************************** useful functions *********************************************** //
 
     function openWithPath() {
@@ -1457,38 +1456,4 @@ Page {
         }
     }
 
-    function checkThemechangeAdjustMarkerPadding() {
-        // Patch: sliderwidth makes a different
-        if ((Theme.primaryColor).toString() === "#ffffff" ) { // -> white font on dark themes, slider is wider as of SF 3.4
-            addThemeSliderPaddingSides = 0
-        }
-        else { // "#000000" -> black font on light themes, slider is smaller as of SF 3.4
-            addThemeSliderPaddingSides = Theme.paddingMedium
-        }
-    }
-
-    function preparePathAndUndo() {
-        idMediaPlayer.stop()
-        finishedLoading = false
-        undoNr = undoNr + 1
-        outputPathPy = tempMediaFolderPath + "video" + ".tmp" + undoNr + "." + tempMediaType
-        console.debug("pyPath: "+ outputPathPy)
-    }
-
-    function undoBackwards() {
-        idMediaPlayer.stop()
-        finishedLoading = false
-        brandNewFile = false // Patch: size warning banner will not show again when going backwards to original image
-        undoNr = undoNr - 1
-        lastTmpMedia2delete = decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") )
-        if (undoNr <= 0) {
-            undoNr = 0
-            idMediaPlayer.source = encodeURI(origMediaFilePath)
-        }
-        else {
-            idMediaPlayer.source = idMediaPlayer.source.toString().replace(".tmp"+(undoNr+1), ".tmp"+(undoNr))
-        }
-        py.deleteLastTMPFunction()
-        py.getVideoInfo(decodeURIComponent( "/" + idMediaPlayer.source.toString().replace(/^(file:\/{3})|(qrc:\/{2})|(http:\/{2})/,"") ), "false" )
-    }
 }

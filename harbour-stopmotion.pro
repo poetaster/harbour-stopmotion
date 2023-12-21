@@ -12,7 +12,15 @@
 # The name of your application
 TARGET = harbour-stopmotion
 
-CONFIG += sailfishapp_qml
+CONFIG += sailfishapp
+
+SOURCES += \
+        src/harbour-stopmotion.cpp \
+        src/nemoimagemetadata.cpp
+HEADERS += \
+        src/IconProvider.h \
+        src/ImageProvider.h \
+        src/nemoimagemetadata.h
 
 DISTFILES += qml/harbour-stopmotion.qml \
     qml/components/Banner.qml \
@@ -20,20 +28,20 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/cover/CoverPage.qml \
     qml/cover/harbour-stopmotion.png \
     qml/pages/CanvasSlideshowPage.qml \
+    qml/pages/PythonHandler.qml \
     qml/pages/ShootScreen.qml \
     qml/pages/CameraButton.qml \
     qml/pages/ImagePage.qml \
     qml/pages/SlideShowPage.qml \
     qml/pages/PlaySlideShowPage.qml \
     qml/img/*.png \
-    qml/pages/SlideshowViewPage.qml \
     qml/utils/localdb.js \
     qml/utils/constants.js \
     qml/sound/*.wav \
     qml/py/videox.py \
     rpm/harbour-stopmotion.spec \
-    rpm/harbour-stopmotion.changes.in \
-    rpm/harbour-stopmotion.changes.run.in \
+    rpm/harbour-stopmotion.changes \
+    rpm/harbour-stopmotion.changes.run \
     translations/*.ts \
     harbour-stopmotion.desktop
 

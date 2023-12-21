@@ -64,7 +64,7 @@ MouseArea {
     Label {
         id: message
         anchors.verticalCenter: popup.verticalCenter
-        font.pixelSize: 32
+        font.pixelSize: Theme.fontSizeMedium
         anchors.left: parent.left
         anchors.leftMargin: Theme.paddingLarge
         anchors.right: parent.right

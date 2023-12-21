@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import Sailfish.Silica 1.0
 import QtMultimedia 5.0
+import "components"
 import "pages"
 
 // Icon
@@ -9,12 +10,20 @@ import "pages"
 ApplicationWindow
 {
     property bool debug:false
-
-    initialPage: Component {
+    // global for name of current picture series
+    property var seriesName
+    // global banner used for feedback, for instance from ffmpeg python file save.
+    Banner {
+        id: banner
+    }
+    initialPage: Component
+    {
         id : sscr
-        ShootScreen {
+        ShootScreen
+        {
             id:shootScr
-            Component.onCompleted: {
+            Component.onCompleted:
+            {
                 videoOutput.source=oCamera;
             }
         }
@@ -25,36 +34,45 @@ ApplicationWindow
     _defaultPageOrientations: Orientation.All
 
     // not using yet, but might add
-    Connections {
+    Connections
+    {
         id: mainWinConnections
         target: null
         ignoreUnknownSignals: true
-        onImageChanged: {
+        onImageChanged:
+        {
             if (debug) console.log("Image changed, current image:", url)
             //coverPage.setImage(url)
         }
-        onSlideshowRunningToggled: {
+        onSlideshowRunningToggled:
+        {
             if (debug) console.log("Slideshow running:", runningStatus)
             //coverPage.toggleSlideshowRunning(runningStatus)
         }
     }
 
-    QtObject {
+    PythonHandler {
+      id: py
+    }
+
+
+    QtObject
+    {
         id: cameraState
         signal slidesShow(bool slideshowRunning)
     }
 
-    Connections {
+    Connections
+    {
         target: cameraState
-        onSlidesShow: {
+        onSlidesShow:
+        {
             if (debug) console.log("cameraState:", slideshowRunning)
             videoOutput.visible = !slideshowRunning
         }
     }
-
-
-
-    VideoOutput {
+    VideoOutput
+    {
         id:videoOutput
         anchors.fill: parent
         z : -1

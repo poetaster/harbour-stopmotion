@@ -28,12 +28,13 @@ Page {
     property bool firstLoaded: false
 
     // Settings.
-    property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
-    property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
+
     property int loop: 0 //Settings.getBooleanSetting(Constants.loopKey, true)
+    property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
-    property bool debug: true
+    property bool debug: false
+
     property var portrait
     property int dx: 0
     property int dy: 0
@@ -115,7 +116,9 @@ Page {
         if (debug) console.log("PlaySlideshowPage destroyed...")
     }
 
-    /* Audio {
+
+   /* Audio {
+
         id: backgroundMusic
         autoPlay: false
         audioRole: Audio.MusicRole
@@ -124,148 +127,155 @@ Page {
             playbackMode: loopMusic ? Playlist.Loop : Playlist.Sequential
         }
     }*/
-    SilicaFlickable {
+
+    PageHeader
+    {
+        id: header
+        title: ""
+        visible: !slideshowRunning
+    }
+
+    Rectangle
+    {
+        id: background
         anchors.fill: parent
-
-        PageHeader
+        color: Theme.colorScheme == Theme.LightOnDark ? "black" : "white"
+    }
+    /* we need this to obtain the orientation to pass to ffmpeg */
+    Image
+    {
+        id: infoLoad
+        visible: false
+        asynchronous: true
+        autoTransform: true
+        fillMode: Image.PreserveAspectFit
+        onStatusChanged:
         {
-            id: header
-            title: ""
-            visible: !slideshowRunning
+            if (status == Image.Ready) {
+               if (debug) console.log('Loaded: sourceSize ==', sourceSize);
+               if (debug) console.log('Loaded: Height ==', height);
+               if (debug) console.log('Loaded: implicitHeight ==', implicitHeight);
+               if (debug) console.log('Loaded: width ==', width);
+               if (debug) console.log('Loaded: impwidth ==', implicitWidth);
+                if (height === 1920)  portrait = "1920"
+                drawingCanvas.width = width
+                drawingCanvas.height = height
+            }
+        }
+    }
+    BusyIndicator
+    {
+        id:busyIndicator
+        size: BusyIndicatorSize.Large
+        anchors {
+            centerIn: parent
+        }
+        running: true
+    }
+    Canvas
+    {
+        id: drawingCanvas
+        anchors
+        {
+            centerIn: parent
         }
 
-        Rectangle
-        {
-            id: background
-            anchors.fill: parent
-            color: Theme.colorScheme == Theme.LightOnDark ? "black" : "white"
+        width:1080
+        height:1920
+
+        renderTarget: Canvas.Image
+        onImageLoaded: {
+            slideshowRunning = true
+            busyIndicator.running = false
         }
-        /* we need this to obtain the orientation to pass to ffmpeg */
-        Image
-        {
-            id: infoLoad
-            visible: false
-            asynchronous: true
-            autoTransform: true
-            fillMode: Image.PreserveAspectFit
-            onStatusChanged:
+
+        Component.onCompleted:  {
+            // preload images.
+            busyIndicator.running = true
+            var img = ""
+            for (var i=0;i<imageModel.count; i++)
             {
-                if (status == Image.Ready) {
-                    slideshowRunning = true
-                    if (debug) console.log('Loaded: sourceSize ==', sourceSize);
-                    if (debug) console.log('Loaded: Height ==', height);
-                    if (debug) console.log('Loaded: implicitHeight ==', implicitHeight);
-                    if (debug) console.log('Loaded: width ==', width);
-                    if (debug) console.log('Loaded: impwidth ==', implicitWidth);
-                    if (height === 1920)  portrait = "1920"
-                    //drawingCanvas.width = width
-                    //drawingCanvas.height = height
-                }
+                img = imageModel.get(i).url
+                if (i==0)
+                    infoLoad.source = img
+                var insertImagePath = "image://paintImage/" + img
+                loadImage(insertImagePath);
             }
         }
-        Canvas
-        {
-            id: drawingCanvas
-            anchors
+    }
+
+    /* Pause indicators. */
+    IconButton
+    {
+        id: recordButton
+        icon.source: Qt.resolvedUrl("../img/play-button.png")
+        scale: 0.75
+        visible: !slideshowRunning
+        anchors {
+            bottom: parent.bottom
+            right: parent.right
+            margins: 50
+            //horizontalCenter: parent.horizontalCenter
+        }
+        onClicked: {
+            toggleSlideshow()
+        }
+        states:
+            [
+            State
             {
-                //fill: parent
-            }
+                name:"Horizontal"
+                when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
 
-            width:1080
-            height:1920
-
-            renderTarget: Canvas.Image
-            onImageLoaded: {
-                slideshowRunning = true
-            }
-
-            Component.onCompleted:  {
-                // preload images.
-                var img = ""
-                for (var i=0;i<imageModel.count; i++)
-                {
-                    img = imageModel.get(i).url
-                    if (i==0)
-                        infoLoad.source = img
-                    loadImage(img);
-                }
-            }
-        }
-
-        /*
-      Pause indicators.
-      */
-        IconButton
-        {
-            id: recordButton
-            icon.source: Qt.resolvedUrl("../img/play-button.png")
-            scale: 0.75
-            visible: !slideshowRunning
-            anchors {
-                bottom: parent.bottom
-                right: parent.right
-                margins: 50
-                //horizontalCenter: parent.horizontalCenter
-            }
-            onClicked: {
-                toggleSlideshow()
-            }
-            states:
-                [
-                State
-                {
-                    name:"Horizontal"
-                    when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
-
-                    AnchorChanges {
-                        target: recordButton
-                        anchors {
-                            bottom: undefined
-                            right: parent.right
-                            horizontalCenter:undefined
-                            verticalCenter: parent.verticalCenter
-                        }
+                AnchorChanges {
+                    target: recordButton
+                    anchors {
+                        bottom: undefined
+                        right: parent.right
+                        horizontalCenter:undefined
+                        verticalCenter: parent.verticalCenter
                     }
                 }
-            ]
-
-        }
-        // Handle start/stop by click.
-        MouseArea
-        {
-            id: slideshowToggleArea
-            anchors {
-                left: parent.left
-                top: parent.top
-                right: nextImageArea.left
-                bottom: parent.bottom
             }
-
-            // Toggle slideshow start/stop.
-            onClicked: {
-                if(debug) console.log("onClicked...")
-                toggleSlideshow()
-            }
-        }
-
-        MouseArea
-        {
-            id: nextImageArea
-            anchors {
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-            }
-            width: parent.width / 5
-            onClicked: {
-                if (debug) console.log("Move to next image...")
-                if (slideshowRunning)
-                    slideshowTimer.restart()
-                nextPicture()
-            }
-        }
+        ]
 
     }
+    // Handle start/stop by click.
+    MouseArea
+    {
+        id: slideshowToggleArea
+        anchors {
+            left: parent.left
+            top: parent.top
+            right: nextImageArea.left
+            bottom: parent.bottom
+        }
+
+        // Toggle slideshow start/stop.
+        onClicked: {
+            if(debug) console.log("onClicked...")
+            toggleSlideshow()
+        }
+    }
+
+    MouseArea
+    {
+        id: nextImageArea
+        anchors {
+            right: parent.right
+            top: parent.top
+            bottom: parent.bottom
+        }
+        width: parent.width / 5
+        onClicked: {
+            if (debug) console.log("Move to next image...")
+            if (slideshowRunning)
+                slideshowTimer.restart()
+            nextPicture()
+        }
+    }
+
+
     // Timer to trigger image change.
     Timer
     {
@@ -304,14 +314,18 @@ Page {
             }
         }
 
-        imageSource = imageModel.get(slideshowOrderArray[imageIndex]).url
+
+        imageSource = "image://paintImage/" + imageModel.get(slideshowOrderArray[imageIndex]).url
+
         imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
 
         var ctx = drawingCanvas.getContext('2d')
         if (drawingCanvas.isImageLoaded(imageSource))
         {
-            ctx.drawImage( imageSource, 0, 0, drawingCanvas.width, drawingCanvas.height )
-            //ctx.drawImage( imageSource, 0, 0)
+
+            //ctx.drawImage( imageSource, 0, 0, drawingCanvas.width, drawingCanvas.height )
+            ctx.drawImage( imageSource, 0, 0)
+
             drawingCanvas.requestPaint()
         }
     }

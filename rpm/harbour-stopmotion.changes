@@ -1,0 +1,30 @@
+* Tue Jul 12 11:13:47 2022 +0200 Mark Washeim <blueprint@poetaster.de> 0.4.2
+- Add automatic creation of subfolder for Stopmotion. Fix spec bits. Version bump.
+
+* Tue Jul 12 09:59:23 2022 +0200 Mark Washeim <blueprint@poetaster.de> 0.4.1
+- Minor formatting.
+- Added missing dep, bump minor version.
+
+* Fri Jul 8 18:11:38 2022 +0200 Mark Washeim <blueprint@poetaster.de> 0.4.0
+- Minor text and version bump for minor release.
+- Moved the python handler out of Slideshow to global scope. start making the callback methods less generic, dependant on page scope.
+- Moved busy indicator, and switch which even triggers start.
+- Add save and restore of some settings.
+- Set the color format conversion, just in case.
+
+* Fri Jul 1 18:48:20 2022 +0200 Mark Washeim <blueprint@poetaster.de> 0.3.0
+- Added Requires for chum.
+- Final changes, 0.3.0 release.
+- Fix loop on this branch. sigh. Add BusyIndicator
+- Corrections to loop and start slideshow AFTER component canvas preloads. Add a loader.
+- Minor version bump False inclusion. Use custom ImageProvider to circumvent QT bug with RGB<->BGR swapping.
+- Fixed the loop settings usage. Add cover image, harbour. Bump release.
+- Formatting.
+- Had forgotten the canvas itself.
+- Build with extra image provider.
+
+* Thu Jun 30 12:51:35 2022 +0200 Mark Washeim <blueprint@poetaster.de> 0.2.0
+- Fixed the loop settings usage. Add cover image, harbour. Bump release.
+- Implemented a canvas based animation method. TODO: fix aspect ratio, fix RBG swapping
+- Implemented: - loop switch, slideshow - Frames per second/ Seconds per frame switch.
+- added toggle for looping slideshow add pfs/spf select to switch timing modality

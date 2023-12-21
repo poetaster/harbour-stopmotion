@@ -24,6 +24,12 @@ def getHomePath ():
     homeDir = str(Path.home())
     pyotherside.send('homePathFolder', homeDir )
 
+def createSaveFolder ():
+    savePath = str(Path.home()) + "/Pictures/Stopmotion"
+    if not os.path.exists( savePath ):
+        os.makedirs( savePath )
+        pyotherside.send('folderExistence', )
+
 def createTmpAndSaveFolder ( tempMediaFolderPath, saveAudioFolderPath ):
     if not os.path.exists( "/"+tempMediaFolderPath ):
         os.makedirs( "/"+tempMediaFolderPath )
@@ -609,6 +615,7 @@ def imageFrei0rFunction ( ffmpeg_staticPath, inputPathPy, outputPathPy, applyEff
 
 
 
+
 # COLLAGE FUNCTIONS
 # ########################################################################################################################
 
@@ -632,10 +639,10 @@ def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPa
     #pyotherside.send('errorOccured', message )
 
     if portrait == "1920":
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
     else:
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
 
     if "true" in success :
@@ -892,6 +899,7 @@ def extractImagesFunction ( ffmpeg_staticPath, inputPathPy, modeExtractImg, thum
             pyotherside.send('progressPercentage', progress)
     if "true" in success :
         pyotherside.send('imagesExtracted', )
+
 
 
 

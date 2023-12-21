@@ -2,18 +2,23 @@ Name:       harbour-stopmotion
 
 # >> macros
 %define _binary_payload w2.xzdio
+%define __provides_exclude_from ^%{_datadir}/%{name}/lib/.*\\.so\\>
+%define __requires_exclude_from ^%{_datadir}/%{name}/lib/.*\\.so\\>
+%define __requires_exclude ^libc|libdl|libm|libpthread|libpython3.8m|libpython3.8m|python|env|libutil.*$
 # << macros
 
-Summary:    Stopmotion takes time lapse photos to make stopmotion animations
-Version:    0.2.1
-Release:    2
-Group:      Qt/Qt
-License:    GPLv3
-BuildArch:  noarch
-URL:        http://github.com/poetaster/harbour-stopmotion
-Source0:    %{name}-%{version}.tar.bz2
-Requires:   sailfishsilica-qt5 >= 0.10.9
-Requires:   libsailfishapp-launcher
+Summary:       Stopmotion animation app
+Version:       0.4.5
+Release:       2
+Group:         Qt/Qt
+License:       GPLv3
+URL:           http://github.com/poetaster/harbour-stopmotion
+Source0:        %{name}-%{version}.tar.bz2
+Requires:       sailfishsilica-qt5 >= 0.10.9
+Requires:       pyotherside-qml-plugin-python3-qt5
+Requires:       ffmpeg
+Requires:       ffmpeg-tools
+
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.3
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -21,7 +26,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
 
 %description
-Stopmotion is an application for making stopmotion animations.
+Stopmotion takes time lapse photos to make stopmotion animations
 
 %if "%{?vendor}" == "chum"
 PackageName: Stopmotion
@@ -75,7 +80,7 @@ desktop-file-install --delete-original       \
 
 %files
 %defattr(-,root,root,-)
-%defattr(0644,root,root,-)
+%{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png

@@ -1,4 +1,4 @@
-﻿import QtQuick 2.5
+import QtQuick 2.5
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
@@ -14,10 +14,11 @@ Page {
     property alias oCamera: camera
     property var pStopmotion
     property var savePath: Database.getProp('path')
-    property var seriesName
     property int seriesCounter: 0
     property int counter: 0
     property string recordPath : StandardPaths.pictures
+
+    property bool latch: true
 
     property bool debug: false
 
@@ -30,7 +31,8 @@ Page {
     property var slideshowPage
 
     // function to pad image/series names with leading 0s
-    function pad(n, width) {
+    function pad(n, width)
+    {
         n = n + '';
         return n.length >= width ? n :
                                    new Array(width - n.length + 1).join('0') + n;
@@ -49,24 +51,9 @@ Page {
          }
     }
 
-    Camera
-    {
-        id: camera
-        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
-        exposure {
-            exposureMode: Camera.ExposureAuto
-        }
-        captureMode: Camera.CaptureStillImage
-        flash.mode: Camera.FlashOff
-        focus.focusMode: Camera.FocusContinuous
-        imageCapture {
-            resolution: "1920x1080"
-        }
 
-    }
+    onOrientationChanged: {
 
-    onOrientationChanged:
-    {
 
         if (orientation===Orientation.Landscape){
             if (debug) console.log("inverted image");
@@ -86,18 +73,38 @@ Page {
         }
     }
 
+    Camera
+    {
+        id: camera
+        imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
+        exposure {
+            exposureMode: Camera.ExposureAuto
+        }
+        captureMode: Camera.CaptureStillImage
+        flash.mode: Camera.FlashOff
+        focus.focusMode: Camera.FocusContinuous
+        imageCapture {
+            resolution: "1920x1080"
+        }
+
+    }
 
     Component
     {
         id: internalPicker
-        FolderPickerDialog
-        {
+
+        FolderPickerDialog {
+
             id: folderiDialog
             title: "Save to:"
-            onAccepted: savePath = selectedPath
+            onAccepted:{
+                savePath = selectedPath
+                selectPath.text = savePath
+            }
             onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         }
     }
+
     Component
     {
         id: externalPicker
@@ -106,7 +113,10 @@ Page {
             id: foldereDialog
             path: "/run/media/defaultuser"
             title: "Save to:"
-            onAccepted: savePath = selectedPath + "/"
+            onAccepted: {
+                savePath = selectedPath + "/"
+                selectPath.text = savePath
+            }
             onRejected: savePath = StandardPaths.pictures
         }
     }
@@ -195,17 +205,22 @@ Page {
 
             visible: !pStopmotion.busyEncoding
 
-            onClicked:
-            {
-                if (mA.state==="Ready")
-                {
-                    pStopmotion.start()
-                    mA.state = "Recording";
-                    // use autofocus
-                    //camera.searchAndLock();
-                }
-                else
-                {
+
+            onClicked: {
+                if (mA.state==="Ready"){
+                    if (latch === true) {
+                        pStopmotion.start()
+                        mA.state = "Recording";
+                        // use autofocus
+                        //camera.searchAndLock();
+                    } else {
+                        playClick.play()
+                        counter++
+                        var filename = savePath +"/" + seriesName + pad(counter, 4) ;
+                        camera.imageCapture.captureToLocation(filename)
+                    }
+                } else {
+
                     pStopmotion.stop();
                     mA.state= "Ready";
                     // reset counter
@@ -347,38 +362,62 @@ Page {
             //            Drag.active:
         }
     }
-    Column
-    {
+
+
+    Column {
         id:leftPanelCol
         anchors.fill: panel
         //            visible: false
-        ComboBox
-        {
+        Slider {
             id:delaySelector
-            anchors
-            {
+            label: "Delay"
+            anchors {
                 left: parent.left
                 right:parent.right
             }
-            label: "Delay"
-            menu: ContextMenu
-            {
-                MenuItem { text: "1 min" ;
-                    onClicked: pStopmotion.interval = 60*1000 }
-                MenuItem { text: "20 sec" ;
-                    onClicked: pStopmotion.interval = 20*1000 }
-                MenuItem { text: "10 sec"
-                    onClicked: pStopmotion.interval = 10*1000 }
-                MenuItem { text: "4 sec"
-                    onClicked: pStopmotion.interval = 4*1000 }
-                MenuItem { text: "1 sec" ;
-                    onClicked: pStopmotion.interval = 1000 }
-
+            //width: parent.width - Theme.paddingLarge
+            minimumValue: 1
+            maximumValue: 120
+            value: 1
+            stepSize: 1
+            valueText: sliderValue
+            onReleased: {
+                pStopmotion.interval = value * 1000
+                Database.setProp('delay',String(sliderValue))
             }
-            onCurrentIndexChanged: Database.setProp('delay',String(currentIndex))
+            Component.onCompleted: {
+                value = Database.getProp('delay')
+                if (value < 1 )
+                    value = 1
+                pStopmotion.interval = value * 1000
+            }
         }
-        ComboBox
-        {
+        ComboBox {
+            id:  latchSelector
+            anchors {
+                left: parent.left
+                right:parent.right
+            }
+
+            label: "Shutter latch"
+            menu: ContextMenu {
+
+                MenuItem { text: "On Interval" ;
+                    onClicked: { latch = true }
+                }
+                MenuItem { text: "Single snap"
+                    onClicked: { latch = false }
+                }
+            }
+
+            Component.onCompleted: {
+                currentIndex = Database.getProp('latch')
+            }
+            onCurrentIndexChanged: Database.setProp('latch',String(currentIndex));
+        }
+
+        ComboBox {
+
             id:  pathSelector
             anchors {
                 left: parent.left
@@ -419,7 +458,7 @@ Page {
                 left: parent.left
                 right:parent.right
             }
-            //                text : StandardPaths.pictures+"/Stopmotion"
+            text : StandardPaths.pictures+"/Stopmotion"
             height:Theme.itemSizeMedium
             placeholderText: "Enter path"
             label: "Selected path"
@@ -428,6 +467,9 @@ Page {
                 savePath = text
                 //pStopmotion.setSavePath(text);
                 Database.setProp('path',text);
+            }
+            Component.onCompleted: {
+                text = Database.getProp('path')
             }
         }
         TextField
@@ -470,7 +512,12 @@ Page {
                     onClicked: camera.flash.mode = Camera.FlashSlowSyncFrontCurtain}
 
             }
+
             onCurrentIndexChanged: Database.setProp('flash_type',String(currentIndex));
+
+            Component.onCompleted: {
+                currentIndex = Database.getProp('flash_type')
+            }
         }
 
         ComboBox
@@ -481,13 +528,16 @@ Page {
                 left: parent.left
                 right:parent.right
             }
-            menu: ContextMenu
-            {
-                MenuItem {
+
+            menu: ContextMenu {
+                MenuItem
+                {
+
                     text: qsTr("One")
                     onClicked: camera.deviceId = 0
                 }
-                MenuItem {
+                MenuItem
+                {
                     text: qsTr("Two")
                     onClicked: {
                         camera.deviceId = 1
@@ -497,6 +547,9 @@ Page {
                 }
             }
             onCurrentIndexChanged: Database.setProp('deviceId',String(currentIndex));
+            Component.onCompleted: {
+                currentIndex = Database.getProp('deviceID')
+            }
         }
 
         Button
@@ -508,7 +561,6 @@ Page {
             }
             text: qsTr("Slideshow")
             onClicked: {
-                //camera.setCameraState()
                 camera.unlock()
                 cameraState.slidesShow(true)
                 slideshowPage = pageStack.push(Qt.resolvedUrl("SlideshowPage.qml", {'editMode': true, 'iniFolder': savePath, 'slideshowRunning': true }))
@@ -610,13 +662,8 @@ Page {
             playClick.play()
             // increment on start
             counter++
-
-            //var date = new Date()
-            //date.toISOString().split('T')[0];
             var filename = savePath +"/" + seriesName + pad(counter, 4) ;
-
             if (debug) console.log(filename);
-
             camera.imageCapture.captureToLocation(filename)
         }
     }
@@ -633,19 +680,6 @@ Page {
         if (debug) console.log("completed");
 
         if (debug) console.log("delay " + Database.getProp('delay'));
-
-        delaySelector.currentIndex = parseInt(Database.getProp('delay'));
-        if (delaySelector.currentIndex==0)
-            //pStopmotion.setTimeout(60);
-            pStopmotion.interval = 60*1000;
-        if (delaySelector.currentIndex==1)
-            pStopmotion.interval = 20*1000;
-        if (delaySelector.currentIndex==2)
-            pStopmotion.interval = 10*1000;
-        if (delaySelector.currentIndex==3)
-            pStopmotion.interval = 4*1000;
-        if (delaySelector.currentIndex==4)
-            pStopmotion.interval = 1*1000;
 
         pathSelector.currentIndex = parseInt(Database.getProp('path_type'));
 
