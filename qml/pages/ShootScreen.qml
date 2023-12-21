@@ -1,4 +1,4 @@
-import QtQuick 2.5
+﻿import QtQuick 2.5
 import QtQuick.LocalStorage 2.0
 import Sailfish.Pickers 1.0 // File-Loader
 import Sailfish.Silica 1.0
@@ -51,9 +51,7 @@ Page {
          }
     }
 
-
     onOrientationChanged: {
-
 
         if (orientation===Orientation.Landscape){
             if (debug) console.log("inverted image");
@@ -92,9 +90,7 @@ Page {
     Component
     {
         id: internalPicker
-
         FolderPickerDialog {
-
             id: folderiDialog
             title: "Save to:"
             onAccepted:{
@@ -108,8 +104,7 @@ Page {
     Component
     {
         id: externalPicker
-        FolderPickerDialog
-        {
+        FolderPickerDialog {
             id: foldereDialog
             path: "/run/media/defaultuser"
             title: "Save to:"
@@ -150,13 +145,12 @@ Page {
         drag.minimumX: -panel.width;
         drag.maximumX: 0
         drag.threshold: 3.0
-        onPressed:
-        {
+        onPressed: {
             downX = mouse.x
             gesture = "none"
         }
-        onMouseXChanged:
-        {
+
+        onMouseXChanged: {
             if (Math.abs(downX-mouse.x)>3.0){
                 if (downX<mouse.x)
                     gesture = "swiperight"
@@ -166,8 +160,7 @@ Page {
             }
         }
 
-        onReleased:
-        {
+        onReleased: {
             if (gesture=="swiperight") {
                 if (panel.x < 0)
                     openDockAnimation.running=true;
@@ -190,8 +183,7 @@ Page {
             visible: camera.imageCapture.ready
             onClicked: camera.imageCapture.capture()
         }*/
-        IconButton
-        {
+        IconButton {
             id: recordButton
             icon.source: Qt.resolvedUrl("../img/play-button.png")
             scale: 0.75
@@ -204,7 +196,6 @@ Page {
             }
 
             visible: !pStopmotion.busyEncoding
-
 
             onClicked: {
                 if (mA.state==="Ready"){
@@ -220,7 +211,6 @@ Page {
                         camera.imageCapture.captureToLocation(filename)
                     }
                 } else {
-
                     pStopmotion.stop();
                     mA.state= "Ready";
                     // reset counter
@@ -235,13 +225,11 @@ Page {
             }
 
             states:[
-                State
-                {
+                State {
                     name:"Horizontal"
                     when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
 
-                    AnchorChanges
-                    {
+                    AnchorChanges {
                         target: recordButton
                         anchors {
                             bottom: undefined
@@ -253,9 +241,7 @@ Page {
                 }
             ]
         }
-
-        BusyIndicator
-        {
+        BusyIndicator {
             id:busyIndicator
             size: BusyIndicatorSize.Large
             anchors.centerIn: parent
@@ -263,40 +249,54 @@ Page {
             running: pStopmotion.running
         }
 
-        Label
-        {
+        Label {
             id : busyText
             //text: qsTr("Processing video encoding\nYou can hide app now, we inform you when it finished");
             text: counter
             color: Theme.highlightColor
             font.pixelSize: Theme.fontSizeTiny
-            anchors
-            {
+            anchors{
                 horizontalCenter:recordButton.horizontalCenter
                 verticalCenter: recordButton.verticalCenter
             }
             //horizontalAlignment: Text.AlignRight
             //wrapMode: "WrapAtWordBoundaryOrAnywhere"
             //visible: pStopmotion.busyEncoding
+            /*
+            states:[
+                State {
+                    name:"Horizontal"
+                    when:orientation === Orientation.Landscape || orientation === Orientation.LandscapeInverted
+                    AnchorChanges {
+                        target: busyText
+
+                        anchors {
+                            bottom:undefined
+                            right: recordButton.right
+                            top: recordButton.bottom
+                            topMargin: 70
+                            horizontalCenter:undefined
+                        }
+                    }
+                }
+            ]
+            */
+
         }
 
         state : "Ready"
         states:[
-            State
-            {
+            State {
                 name:"Ready"
-                PropertyChanges
-                {
+                PropertyChanges {
                     target: recordButton
                     icon.source : Qt.resolvedUrl("../img/play-button.png")
                 }
             },
-            State
-            {
+            State {
                 name:"Recording"
-                //when:camera.videoRecorder.recorderStatus === CameraRecorder.RecordingStatus
-                PropertyChanges
-                {
+                //                when:camera.videoRecorder.recorderStatus === CameraRecorder.RecordingStatus
+                PropertyChanges {
                     target: recordButton
                     icon.source : Qt.resolvedUrl("../img/stop-button.png")
                 }
@@ -308,8 +308,7 @@ Page {
     {
         id: panel
         height: parent.height
-        anchors
-        {
+        anchors {
             top:parent.top
             bottom: parent.bottom
         }
@@ -328,14 +327,12 @@ Page {
             drag.minimumX: -panel.width;
             drag.maximumX: 0
             drag.threshold: 3.0
-            onPressed:
-            {
+            onPressed: {
                 dockDownX = panel.x;
                 gesture = "none"
             }
 
-            onMouseXChanged:
-            {
+            onMouseXChanged: {
                 if (Math.abs(dockDownX-panel.x)>1.0){
                     if (dockDownX<panel.x)
                         gesture = "swiperight";
@@ -346,8 +343,7 @@ Page {
                     dockDownX = panel.x
             }
 
-            onReleased:
-            {
+            onReleased: {
                 if (gesture=="swiperight")
                     if (panel.x < 0)
                         openDockAnimation.running=true;
@@ -362,7 +358,6 @@ Page {
             //            Drag.active:
         }
     }
-
 
     Column {
         id:leftPanelCol
@@ -417,7 +412,6 @@ Page {
         }
 
         ComboBox {
-
             id:  pathSelector
             anchors {
                 left: parent.left
@@ -426,20 +420,17 @@ Page {
 
             label: "Save path"
             menu: ContextMenu {
-                MenuItem {
-                    text: "Internal" ;
-                    onClicked:
-                    {
+
+                MenuItem { text: "Internal" ;
+                    onClicked: {
                         pageStack.push(internalPicker)
                         if (savePath !== ""){
                             selectPath.text = savePath
                         }
                     }
                 }
-                MenuItem {
-                    text: "SD card"
-                    onClicked:
-                    {
+                MenuItem { text: "SD card"
+                    onClicked: {
                         pageStack.push(externalPicker)
                         if (savePath !== ""){
                             if (debug) console.debug(savePath)
@@ -448,13 +439,13 @@ Page {
                     }
                 }
             }
+
             onCurrentIndexChanged: Database.setProp('path_type',String(currentIndex));
         }
         TextField
         {
             id:selectPath
-            anchors
-            {
+            anchors {
                 left: parent.left
                 right:parent.right
             }
@@ -462,8 +453,7 @@ Page {
             height:Theme.itemSizeMedium
             placeholderText: "Enter path"
             label: "Selected path"
-            onTextChanged:
-            {
+            onTextChanged: {
                 savePath = text
                 //pStopmotion.setSavePath(text);
                 Database.setProp('path',text);
@@ -475,8 +465,7 @@ Page {
         TextField
         {
             id:sName
-            anchors
-            {
+            anchors {
                 left: parent.left
                 right:parent.right
             }
@@ -528,11 +517,9 @@ Page {
                 left: parent.left
                 right:parent.right
             }
-
             menu: ContextMenu {
                 MenuItem
                 {
-
                     text: qsTr("One")
                     onClicked: camera.deviceId = 0
                 }
@@ -551,7 +538,6 @@ Page {
                 currentIndex = Database.getProp('deviceID')
             }
         }
-
         Button
         {
             id: slideshowShowSlideshow
@@ -654,8 +640,7 @@ Page {
         running: false
         repeat: true
 
-        onTriggered:
-        {
+        onTriggered: {
             if ( ! savePath || savePath === "") {
                 savePath = StandardPaths.pictures+"/Stopmotion/"
             }
@@ -668,8 +653,7 @@ Page {
         }
     }
 
-    Component.onCompleted:
-    {
+    Component.onCompleted: {
 
         camera.viewfinder.resolution = "1920x1080"//getNearestViewFinderResolution();
         camera.imageCapture.resolution = "1920x1080"
@@ -716,8 +700,7 @@ Page {
         }
 
     ]
-    onStateChanged:
-    {
+    onStateChanged: {
 
         if (debug) console.log("state changed to "+page.state);
         if (debug) console.log("record state : "+mA.state);
