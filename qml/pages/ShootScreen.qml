@@ -635,19 +635,6 @@ Page {
 
         if (debug) console.log("delay " + Database.getProp('delay'));
 
-        delaySelector.currentIndex = parseInt(Database.getProp('delay'));
-        if (delaySelector.currentIndex==0)
-            //pStopmotion.setTimeout(60);
-            pStopmotion.interval = 60*1000;
-        if (delaySelector.currentIndex==1)
-            pStopmotion.interval = 20*1000;
-        if (delaySelector.currentIndex==2)
-            pStopmotion.interval = 10*1000;
-        if (delaySelector.currentIndex==3)
-            pStopmotion.interval = 4*1000;
-        if (delaySelector.currentIndex==4)
-            pStopmotion.interval = 1*1000;
-
         pathSelector.currentIndex = parseInt(Database.getProp('path_type'));
 
         if (Database.getProp('path')!=="")
