@@ -91,7 +91,10 @@ Page {
         FolderPickerDialog {
             id: folderiDialog
             title: "Save to:"
-            onAccepted: savePath = selectedPath
+            onAccepted:{
+                savePath = selectedPath
+                selectPath.text = savePath
+            }
             onRejected: savePath = StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
         }
     }
@@ -103,7 +106,10 @@ Page {
             id: foldereDialog
             path: "/run/media/defaultuser"
             title: "Save to:"
-            onAccepted: savePath = selectedPath + "/"
+            onAccepted: {
+                savePath = selectedPath + "/"
+                selectPath.text = savePath
+            }
             onRejected: savePath = StandardPaths.pictures
         }
     }
@@ -411,7 +417,7 @@ Page {
                 left: parent.left
                 right:parent.right
             }
-            //                text : StandardPaths.pictures+"/Stopmotion"
+            text : StandardPaths.pictures+"/Stopmotion"
             height:Theme.itemSizeMedium
             placeholderText: "Enter path"
             label: "Selected path"

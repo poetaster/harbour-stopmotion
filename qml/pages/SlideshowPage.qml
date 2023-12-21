@@ -58,6 +58,7 @@ Page
 
         seriesModel.folder = Database.getProp('path')
         seriesModel.nameFilters =[seriesName + "*.jpg"]
+
         if(debug) console.log(seriesModel.count)
         if(debug) console.log(seriesModel.folder)
 
@@ -71,7 +72,6 @@ Page
             imageListModel.append({'fileName': fileName, 'url': Qt.resolvedUrl(url)})
         }
 
-        //imageGrid.model = seriesModel
     }
 
 
@@ -522,7 +522,6 @@ Page
                     // Handle selection
                     imageListModel.append({'fileName': fileName, 'url': url})
                 }
-                imageGrid.model = imageListModel
             }
         }
     }
