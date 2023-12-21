@@ -187,5 +187,6 @@
         <source>Add last series</source>
         <translation type="unfinished"></translation>
     </message>
+
 </context>
 </TS>

@@ -28,12 +28,13 @@ Page {
     property bool firstLoaded: false
 
     // Settings.
-    property int slideshowInterval: 200 //Settings.getIntSetting(Constants.intervalKey, 5) * 1000
+
     property int loop: 0 //Settings.getBooleanSetting(Constants.loopKey, true)
     property bool loopMusic: false //Settings.getBooleanSetting(Constants.loopMusicKey, true)
     property int fpsMode
     property int saveFps
     property bool debug: false
+
     property var portrait
     property int dx: 0
     property int dy: 0
@@ -115,7 +116,9 @@ Page {
         if (debug) console.log("PlaySlideshowPage destroyed...")
     }
 
+
    /* Audio {
+
         id: backgroundMusic
         autoPlay: false
         audioRole: Audio.MusicRole
@@ -272,6 +275,7 @@ Page {
         }
     }
 
+
     // Timer to trigger image change.
     Timer
     {
@@ -310,14 +314,18 @@ Page {
             }
         }
 
+
         imageSource = "image://paintImage/" + imageModel.get(slideshowOrderArray[imageIndex]).url
+
         imageChanged(imageModel.get(slideshowOrderArray[imageIndex]).url)
 
         var ctx = drawingCanvas.getContext('2d')
         if (drawingCanvas.isImageLoaded(imageSource))
         {
+
             //ctx.drawImage( imageSource, 0, 0, drawingCanvas.width, drawingCanvas.height )
             ctx.drawImage( imageSource, 0, 0)
+
             drawingCanvas.requestPaint()
         }
     }

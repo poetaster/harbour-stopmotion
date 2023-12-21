@@ -18,6 +18,7 @@ Requires:       sailfishsilica-qt5 >= 0.10.9
 Requires:       pyotherside-qml-plugin-python3-qt5
 Requires:       ffmpeg
 Requires:       ffmpeg-tools
+
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.3
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
