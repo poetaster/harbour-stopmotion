@@ -41,6 +41,7 @@ DISTFILES += qml/harbour-stopmotion.qml \
     qml/py/videox.py \
     rpm/harbour-stopmotion.spec \
     rpm/harbour-stopmotion.changes \
+    rpm/harbour-stopmotion.changes.run \
     translations/*.ts \
     harbour-stopmotion.desktop
 

@@ -14,7 +14,6 @@ Page {
     property alias oCamera: camera
     property var pStopmotion
     property var savePath: Database.getProp('path')
-    property var seriesName
     property int seriesCounter: 0
     property int counter: 0
     property string recordPath : StandardPaths.pictures
@@ -349,31 +348,28 @@ Page {
         id:leftPanelCol
         anchors.fill: panel
         //            visible: false
-        ComboBox
-        {
+        Slider {
             id:delaySelector
+            label: "Delay"
             anchors {
                 left: parent.left
                 right:parent.right
             }
-            label: "Delay"
-            menu: ContextMenu {
-                MenuItem { text: "1 min" ;
-                    onClicked: pStopmotion.interval = 60*1000 }
-                MenuItem { text: "20 sec" ;
-                    onClicked: pStopmotion.interval = 20*1000 }
-                MenuItem { text: "10 sec"
-                    onClicked: pStopmotion.interval = 10*1000 }
-                MenuItem { text: "4 sec"
-                    onClicked: pStopmotion.interval = 4*1000 }
-                MenuItem { text: "1 sec" ;
-                    onClicked: pStopmotion.interval = 1000 }
-
+            //width: parent.width - Theme.paddingLarge
+            minimumValue: 1
+            maximumValue: 120
+            value: 1
+            stepSize: 1
+            valueText: sliderValue
+            onReleased: {
+                pStopmotion.interval = value * 1000
+                Database.setProp('delay',String(sliderValue))
             }
-            onCurrentIndexChanged: Database.setProp('delay',String(currentIndex))
-
             Component.onCompleted: {
-                currentIndex =  Database.getProp('delay')
+                value = Database.getProp('delay')
+                if (value < 1 )
+                    value = 1
+                pStopmotion.interval = value * 1000
             }
         }
         ComboBox

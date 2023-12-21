@@ -2,6 +2,7 @@ import QtQuick 2.5
 import Sailfish.Silica 1.0
 import Sailfish.Pickers 1.0
 import Nemo.Thumbnailer 1.0
+import Qt.labs.folderlistmodel 2.1
 
 import "../components"
 import "../utils/localdb.js" as Database
@@ -31,7 +32,7 @@ Page
 
     property Item remorse
 
-    property bool debug: false
+    property bool debug: true
 
     // python / export specific vars
 
@@ -49,14 +50,43 @@ Page
     property int fpsMode: 0
     property int loop: 1
 
+    function addLastSeries(){
+        //const p = Database.getProp('path')
+        //const s = seriesName
+        if(debug) console.log(seriesName)
+        if(debug) console.log(Database.getProp('path'))
+
+        seriesModel.folder = Database.getProp('path')
+        seriesModel.nameFilters =[seriesName + "*.jpg"]
+        if(debug) console.log(seriesModel.count)
+        if(debug) console.log(seriesModel.folder)
+
+        imageListModel.clear()
+
+        for (var i = 0; i < seriesModel.count; ++i) {
+            var url = seriesModel.get(i, "fileURL")
+            if (debug) console.log(url)
+            var fileName = seriesModel.get(i, "fileName")
+            // Handle selection
+            imageListModel.append({'fileName': fileName, 'url': Qt.resolvedUrl(url)})
+        }
+
+        //imageGrid.model = seriesModel
+    }
+
+
+    FolderListModel {
+        id: seriesModel
+        nameFilters: [seriesName + "*.jpg"]
+        folder: Database.getProp('path')
+    }
+
     onStatusChanged: {
-        if(status === PageStatus.Activating)
-        {
+        if(status === PageStatus.Activating) {
             // Connection to Video display from window page
             cameraState.slidesShow(true)
-
-        } else if(status === PageStatus.Deactivating) // Deactivating, set defaults.
-        {
+        } else if(status === PageStatus.Deactivating) {
+            // Deactivating, set defaults.
         }
     }
 
@@ -163,6 +193,11 @@ Page
                 }
             }
             MenuItem {
+                id: seriesPictures
+                text: qsTr("Add last series")
+                onClicked: addLastSeries()
+            }
+            MenuItem {
                 id: menuPictures
                 text: qsTr("Add files")
                 onClicked: pageStack.push(multiImagePickerDialog)
@@ -176,8 +211,6 @@ Page
                 text: qsTr("Start slideshow")
                 enabled: imageListModel.count > 0
                 onClicked: {
-                    if (debug) console.log("Start slideshow...")
-                    //playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'musicModel': backgroundMusicModel, 'slideshowOrderArray': getSlideshowOrder()})
                     playSlideshowPage = pageStack.push(Qt.resolvedUrl("PlaySlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                     mainWinConnections.target = playSlideshowPage
                 }
@@ -187,21 +220,9 @@ Page
                 text: qsTr("Start canvas slideshow")
                 enabled: imageListModel.count > 0
                 onClicked: {
-                    if (debug) console.log("Start slideshow...")
                     pageStack.push(Qt.resolvedUrl("CanvasSlideshowPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
                 }
             }
-            /*
-            MenuItem {
-                id: menuSlideviewStartSlideshow
-                text: qsTr("Start sView slideshow")
-                enabled: imageListModel.count > 0
-                onClicked: {
-                    if (debug) console.log("Start slideshow...")
-                    pageStack.push(Qt.resolvedUrl("SlideshowViewPage.qml"), {'imageModel': imageListModel, 'fpsMode':fpsMode,  'slideshowOrderArray': getSlideshowOrder(), 'loop':loop})
-                }
-            }
-            */
 
         }
 
@@ -501,6 +522,7 @@ Page
                     // Handle selection
                     imageListModel.append({'fileName': fileName, 'url': url})
                 }
+                imageGrid.model = imageListModel
             }
         }
     }

@@ -183,5 +183,9 @@
         <source>Start canvas slideshow</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Add last series</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>

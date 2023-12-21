@@ -639,10 +639,10 @@ def createFilmstripFunction ( ffmpeg_staticPath, outputPathPy, tempMediaFolderPa
     #pyotherside.send('errorOccured', message )
 
     if portrait == "1920":
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-vf", "transpose=1", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
     else:
-        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg", "-c:v", "mjpeg", "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
+        for progress in run_ffmpeg_command([ ffmpeg_staticPath, "-hide_banner", "-y", "-framerate", sFps, "-pattern_type", "glob", "-i", tempMediaFolderPath+"/*.jpg",  "-preset", "veryfast", "-r", sFps, "-pix_fmt", "yuv420p", outputPathPy ]):
             pyotherside.send('progressPercentage', progress)
 
     if "true" in success :

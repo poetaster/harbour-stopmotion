@@ -1,6 +1,7 @@
 Name:       harbour-stopmotion
 
 # >> macros
+%define _binary_payload w2.xzdio
 # << macros
 
 Summary:       Stopmotion animation app

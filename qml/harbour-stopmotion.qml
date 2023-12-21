@@ -10,6 +10,8 @@ import "pages"
 ApplicationWindow
 {
     property bool debug:false
+    // global for name of current picture series
+    property var seriesName
     // global banner used for feedback, for instance from ffmpeg python file save.
     Banner {
         id: banner
