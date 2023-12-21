@@ -8,7 +8,7 @@ Name:       harbour-stopmotion
 # << macros
 
 Summary:       Stopmotion animation app
-Version:       0.4.4
+Version:       0.4.5
 Release:       2
 Group:         Qt/Qt
 License:       GPLv3

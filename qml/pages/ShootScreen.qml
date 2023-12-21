@@ -18,6 +18,8 @@ Page {
     property int counter: 0
     property string recordPath : StandardPaths.pictures
 
+    property bool latch: true
+
     property bool debug: false
 
     QtObject
@@ -197,10 +199,17 @@ Page {
 
             onClicked: {
                 if (mA.state==="Ready"){
-                    pStopmotion.start()
-                    mA.state = "Recording";
-                    // use autofocus
-                    //camera.searchAndLock();
+                    if (latch === true) {
+                        pStopmotion.start()
+                        mA.state = "Recording";
+                        // use autofocus
+                        //camera.searchAndLock();
+                    } else {
+                        playClick.play()
+                        counter++
+                        var filename = savePath +"/" + seriesName + pad(counter, 4) ;
+                        camera.imageCapture.captureToLocation(filename)
+                    }
                 } else {
                     pStopmotion.stop();
                     mA.state= "Ready";
@@ -378,8 +387,31 @@ Page {
                 pStopmotion.interval = value * 1000
             }
         }
-        ComboBox
-        {
+        ComboBox {
+            id:  latchSelector
+            anchors {
+                left: parent.left
+                right:parent.right
+            }
+
+            label: "Shutter latch"
+            menu: ContextMenu {
+
+                MenuItem { text: "On Interval" ;
+                    onClicked: { latch = true }
+                }
+                MenuItem { text: "Single snap"
+                    onClicked: { latch = false }
+                }
+            }
+
+            Component.onCompleted: {
+                currentIndex = Database.getProp('latch')
+            }
+            onCurrentIndexChanged: Database.setProp('latch',String(currentIndex));
+        }
+
+        ComboBox {
             id:  pathSelector
             anchors {
                 left: parent.left
@@ -425,6 +457,9 @@ Page {
                 savePath = text
                 //pStopmotion.setSavePath(text);
                 Database.setProp('path',text);
+            }
+            Component.onCompleted: {
+                text = Database.getProp('path')
             }
         }
         TextField
@@ -612,13 +647,8 @@ Page {
             playClick.play()
             // increment on start
             counter++
-
-            //var date = new Date()
-            //date.toISOString().split('T')[0];
             var filename = savePath +"/" + seriesName + pad(counter, 4) ;
-
             if (debug) console.log(filename);
-
             camera.imageCapture.captureToLocation(filename)
         }
     }
